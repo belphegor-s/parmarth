@@ -1,0 +1,112 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-card {
+  border: 2px solid #227bc0;
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.error {
+  color: #fff;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: #fa7070;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem auto;
+  text-align: center;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  color: #535353;
+  text-align: left;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-inputs {
+  all: unset;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0.5rem auto;
+  margin-bottom: 1rem;
+  padding: 0.3rem;
+  width: 300px;
+  height: 30px;
+  font-size: 1.2rem;
+}
+
+.login-inputs:focus {
+  border: 1px solid #535353;
+}
+
+.login-btn {
+  width: 130px;
+  padding: 0.5rem;
+  margin: 0 auto;
+  margin-top: 1rem;
+  border-radius: 5px;
+  border: 2px solid #277bc0;
+  background-color: #227bc0;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-btn:hover {
+  box-shadow: 0 0 10px #277bc0a2;
+  opacity: 0.9;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #000;
+  width: 18px;
+  height: 18px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (width< 520px) {
+  .login-inputs {
+    width: 240px;
+    padding: 0.1rem;
+    font-size: 1rem;
+  }
+}

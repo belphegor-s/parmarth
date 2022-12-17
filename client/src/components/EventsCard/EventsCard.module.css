@@ -1,0 +1,27 @@
+.events-card {
+  border: 2px solid #277bc0;
+  border-radius: 10px;
+  width: 330px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  cursor: default;
+  margin-bottom: 2rem;
+}
+
+.events-card:hover {
+  box-shadow: 0 0 10px #535353;
+  transform: translateY(-5px);
+}
+
+.event-img {
+  width: 330px;
+  height: 230px;
+}
+
+.event-card__content {
+  padding: 1rem;
+}
+
+.event-card__content > h1 {
+  font-family: "Merriweather", sans-serif;
+}

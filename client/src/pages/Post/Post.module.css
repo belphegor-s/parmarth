@@ -1,0 +1,85 @@
+.body {
+  padding: 2rem;
+}
+
+.post {
+  margin: 0 4rem;
+}
+
+.post img {
+  width: 70%;
+  height: 70%;
+  display: block;
+  margin: 2rem auto;
+}
+
+.title {
+  text-align: center;
+}
+
+.category {
+  text-align: center;
+  color: gray;
+}
+
+.edit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  background-color: #277bc0;
+  color: #fff;
+  font-size: 20px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin: 2rem auto;
+  margin-top: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.edit:hover {
+  box-shadow: 0 0 10px #277bc0a2;
+  opacity: 0.9;
+}
+
+.loader {
+  border: 10px solid #ccc;
+  border-radius: 50%;
+  border-top: 10px solid #277bc0;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: 2rem auto;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (width< 1024px) {
+  .post {
+    margin: 0 2rem;
+  }
+}
+
+@media screen and (width< 768px) {
+  .post {
+    margin: 0;
+  }
+}

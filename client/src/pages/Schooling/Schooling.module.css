@@ -1,0 +1,86 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.content {
+  width: 80%;
+  box-shadow: 0 0 10px #ccc;
+  border-radius: 10px;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+}
+
+.content > img {
+  width: 80%;
+}
+
+.content > h1 {
+  text-align: center;
+}
+
+.content > p {
+  text-align: justify;
+  margin-top: 4rem;
+}
+
+.hr {
+  width: 100px;
+  border: 8px dotted #277bc0;
+  border-bottom: none;
+  margin-bottom: 2rem;
+}
+
+.rte-data {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.rte-card {
+  text-decoration: none;
+}
+
+.loader {
+  border: 10px solid #ccc;
+  border-radius: 50%;
+  border-top: 10px solid #277bc0;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (width<768px) {
+  .content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}

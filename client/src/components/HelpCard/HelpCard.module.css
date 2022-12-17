@@ -1,0 +1,24 @@
+.card {
+  width: 300px;
+  height: 400px;
+  margin: 1rem 1.5rem;
+  padding: 1rem;
+  background-color: #ccc;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: 0 0 10px #0d4c92;
+}
+
+.title {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.title:hover {
+  color: #277bc0;
+  opacity: 0.8;
+}

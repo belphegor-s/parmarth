@@ -1,0 +1,145 @@
+:root {
+  --nav-height: 122px;
+}
+
+.parallax {
+  background-image: url("../../assets/img/background.png");
+  height: calc(100vh - var(--nav-height)) !important;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.parmarth {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 6rem;
+  flex-wrap: wrap;
+}
+
+.about {
+  width: 50%;
+  text-align: left;
+  margin: 0 1rem;
+}
+
+.children {
+  height: 450px;
+  margin: 0 1rem;
+  border-radius: 10px;
+}
+
+.gallery {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: #277bc0;
+  margin-bottom: 2rem;
+}
+
+.hr {
+  width: 100px;
+  border: 8px dotted #277bc0;
+  border-bottom: none;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.carousel {
+  margin: auto;
+  padding: 0 10rem;
+  margin-top: 5rem;
+}
+
+.carousel-img {
+  height: 500px;
+}
+
+.works {
+  margin: 5rem 0;
+}
+
+.our-wings {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: #277bc0;
+}
+
+.tasks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+}
+
+.help {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3rem;
+}
+
+@media screen and (width< 1280px) {
+  .top-section {
+    flex-direction: column;
+    margin: 2rem 0;
+  }
+  .about {
+    text-align: justify;
+    width: 80%;
+  }
+  .children {
+    margin-top: 2rem;
+  }
+}
+
+@media screen and (width< 1080px) {
+  .carousel {
+    padding: 3rem;
+  }
+  .carousel-img {
+    height: 300px;
+  }
+}
+
+@media screen and (width< 520px) {
+  .carousel {
+    padding: 1rem;
+  }
+  .carousel-img {
+    height: 250px;
+  }
+  .children {
+    width: 80%;
+    height: 250px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .carousel-img {
+    height: 700px;
+  }
+}

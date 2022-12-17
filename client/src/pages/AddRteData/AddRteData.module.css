@@ -1,0 +1,133 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  background-color: #ddd;
+}
+
+.form > h1 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.form > label {
+  color: #535353;
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.form > input {
+  padding: 0.5rem;
+  outline: none;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-bottom: 2rem;
+}
+
+.form > input:focus {
+  box-shadow: 0 0 10px #277bc0a2;
+}
+
+.dropdown {
+  color: #535353;
+  padding: 0.5rem;
+  padding-right: 2rem;
+  font-size: 18px;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("../../assets/img/down.png") 98% / 6% no-repeat #fff;
+  background-size: 12px 12px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.dropdown > option {
+  font-family: monospace;
+  color: #000;
+  font-size: 16px;
+}
+
+.dropdown:focus {
+  box-shadow: 0 0 10px #277bc0a2;
+}
+
+.dropdown::-ms-expand {
+  display: none;
+}
+
+.submit {
+  width: 200px;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  background-color: #277bc0;
+  color: #fff;
+  font-size: 20px;
+  padding: 0.5rem;
+  cursor: pointer;
+  margin: 0 auto;
+  margin-top: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit:hover {
+  box-shadow: 0 0 10px #277bc0a2;
+  opacity: 0.9;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid gray;
+  width: 15px;
+  height: 15px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+.excel-image {
+  display: block;
+  width: 100%;
+  margin: 1rem auto;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (width< 520px) {
+  .form {
+    width: 300px;
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,35 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  padding: 2rem;
+  border: 1px solid #277bc0;
+  border-radius: 5px;
+  margin: 2rem;
+  transition: 0.3s;
+  cursor: pointer;
+  width: 320px;
+}
+
+.task-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px #adadad;
+}
+
+@media screen and (width< 520px) {
+  .card {
+    width: 270px;
+  }
+}
+
+@media screen and (width>1280px) {
+  .card {
+    margin: 3rem;
+  }
+}

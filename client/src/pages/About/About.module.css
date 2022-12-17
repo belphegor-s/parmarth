@@ -1,0 +1,29 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.body > h1 {
+  text-align: center;
+}
+
+.hr {
+  width: 100px;
+  border: 8px dotted #277bc0;
+  border-bottom: none;
+  margin-bottom: 2rem;
+}
+
+.body > p {
+  text-align: justify;
+  margin: 0 4rem;
+}
+
+@media screen and (width<768px) {
+  .body > p {
+    margin: 0 1rem;
+  }
+}
