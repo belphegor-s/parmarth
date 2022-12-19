@@ -330,7 +330,7 @@ const MobileNav = () => {
           onClick={() => {
             authCtx.logout();
             navigate("/");
-            toast.success("Successfully logged in");
+            toast.success("Successfully logged out");
           }}
         >
           LOGOUT

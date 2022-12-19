@@ -214,7 +214,7 @@ const Navbar = () => {
                       className={styles.login}
                       onClick={() => {
                         authCtx.logout();
-                        toast.success("Successfully logged in");
+                        toast.success("Successfully logged out");
                       }}
                     >
                       Logout
