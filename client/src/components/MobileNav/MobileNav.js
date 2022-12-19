@@ -4,6 +4,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { slide as Menu } from "react-burger-menu";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import AuthContext from "../../store/auth-context";
+import toast from "react-hot-toast";
 
 const MobileNav = () => {
   const navigate = useNavigate();
@@ -329,6 +330,7 @@ const MobileNav = () => {
           onClick={() => {
             authCtx.logout();
             navigate("/");
+            toast.success("Successfully logged in");
           }}
         >
           LOGOUT

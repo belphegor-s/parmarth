@@ -56,6 +56,7 @@ const Login = () => {
           );
           authCtx.login(resData.token, expirationTime.toISOString());
           navigate("/", { replace: true });
+          toast.success("Successfully logged in");
         }
       })
       .catch((err) => toast.error(err.message));

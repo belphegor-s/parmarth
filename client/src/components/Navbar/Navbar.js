@@ -4,6 +4,7 @@ import MobileNav from "../MobileNav/MobileNav";
 import styles from "./Navbar.module.css";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import AuthContext from "../../store/auth-context";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -213,6 +214,7 @@ const Navbar = () => {
                       className={styles.login}
                       onClick={() => {
                         authCtx.logout();
+                        toast.success("Successfully logged in");
                       }}
                     >
                       Logout
