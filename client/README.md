@@ -4,4 +4,4 @@ Parmarth's Official App
 
 ## Author
 
-Ayush Sharma
+Ayush Sharma | EC-3rd Yearw
