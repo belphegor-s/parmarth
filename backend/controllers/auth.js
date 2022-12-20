@@ -6,36 +6,39 @@ exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   let loadedUser;
+
   Admin.findOne({ email: email })
     .then((data) => {
       if (!data) {
-        return res.status(422).json({ error: "User Not found!" });
+        res.status(422).json({ error: "User Not found!" });
+        return "user not found";
       }
       loadedUser = data;
       return bcrypt.compare(password, data.password);
     })
     .then((isEqual) => {
-      if (!isEqual) {
-        return res.status(422).json({ error: "Wrong Password!" });
-      }
-      const token = jwt.sign(
-        {
-          email: loadedUser.email,
-          userId: loadedUser._id.toString(),
-        },
-        process.env.JWT_SECRET_KEY,
-        {
-          expiresIn: "1h",
-        }
-      );
+      if (isEqual !== "user not found") {
+        if (!isEqual) {
+          return res.status(422).json({ error: "Wrong Password!" });
+        } else {
+          const token = jwt.sign(
+            {
+              email: loadedUser.email,
+              userId: loadedUser._id.toString(),
+            },
+            process.env.JWT_SECRET_KEY,
+            {
+              expiresIn: "1h",
+            }
+          );
 
-      return res
-        .status(200)
-        .json({
-          token: token,
-          userId: loadedUser._id.toString(),
-          expiresIn: 3600,
-        });
+          return res.status(200).json({
+            token: token,
+            userId: loadedUser._id.toString(),
+            expiresIn: 3600,
+          });
+        }
+      }
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
