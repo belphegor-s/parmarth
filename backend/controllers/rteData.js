@@ -55,7 +55,7 @@ exports.addRteData = (req, res, next) => {
           .save()
           .then(() => {
             console.log("Added Data");
-            return res.status(200).json({ message: "Successfully added data" });
+            return res.status(201).json({ message: "Successfully added data" });
           })
           .catch((err) => res.status(500).json({ error: err }));
       } else if (data.studentName === newData.studentName) {

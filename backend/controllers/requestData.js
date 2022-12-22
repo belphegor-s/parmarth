@@ -89,7 +89,7 @@ exports.addRequestData = (req, res, next) => {
               .then(() => {
                 console.log("Added Data");
                 return res
-                  .status(200)
+                  .status(201)
                   .json({ message: "Successfully added your request" });
               })
               .catch((err) => res.status(500).json({ error: err.message }));

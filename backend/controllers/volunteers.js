@@ -64,7 +64,7 @@ exports.addVolunteerData = (req, res, next) => {
           .save()
           .then(() => {
             console.log("Added Data");
-            return res.status(200).json({ message: "Successfully added data" });
+            return res.status(201).json({ message: "Successfully added data" });
           })
           .catch((err) => res.status(500).json({ error: err.message }));
       } else if (data.name === name.trim().toUpperCase()) {
