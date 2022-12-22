@@ -4,15 +4,15 @@ const VolunteersDataController = require("../controllers/volunteers");
 const isAuth = require("../middleware/is-auth");
 
 router.get(
-  "/getVolunteersData",
+  "/api/getVolunteersData",
   isAuth,
-  VolunteersDataController.getVolunteersData
+  VolunteersDataController.getVolunteersData,
 );
 
 router.post(
-  "/addVolunteerData",
+  "/api/addVolunteerData",
   isAuth,
-  VolunteersDataController.addVolunteerData
+  VolunteersDataController.addVolunteerData,
 );
 
 module.exports = router;

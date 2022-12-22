@@ -25,17 +25,17 @@ const upload = multer({
   },
 }).single("excelFile");
 
-router.get("/getRteData", rteDataController.getRteData);
+router.get("/api/getRteData", rteDataController.getRteData);
 router.get(
-  "/getRteData/:academicYear",
-  rteDataController.getRteDataByAcademicYear
+  "/api/getRteData/:academicYear",
+  rteDataController.getRteDataByAcademicYear,
 );
-router.post("/addRteData", isAuth, rteDataController.addRteData);
+router.post("/api/addRteData", isAuth, rteDataController.addRteData);
 router.post(
-  "/addRteDataViaExcel",
+  "/api/addRteDataViaExcel",
   isAuth,
   upload,
-  rteDataController.addRteDataViaExcel
+  rteDataController.addRteDataViaExcel,
 );
 
 module.exports = router;

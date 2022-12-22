@@ -3,6 +3,6 @@ const router = express.Router();
 const approveRequest = require("../controllers/approveRequest");
 const isAuth = require("../middleware/is-auth");
 
-router.post("/approveRequest/:id", isAuth, approveRequest.approveRequest);
+router.post("/api/approveRequest/:id", isAuth, approveRequest.approveRequest);
 
 module.exports = router;
