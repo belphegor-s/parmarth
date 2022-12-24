@@ -9,6 +9,8 @@ const HelpCard = (props) => {
       <hr
         style={{
           border: "2px solid #277bc0",
+          borderCollapse: "collapse",
+          borderBottom: "none",
           width: "50px",
           borderRadius: "10px",
         }}
