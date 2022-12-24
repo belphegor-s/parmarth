@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
   const authHeader = req.get("Authorization");
   if (!authHeader) {
-    return res.status(401).json({ error: "Not Authorized" });
+    return res.status(401).json({ error: "Not Authenticated" });
   }
   const token = req.get("Authorization").split(" ")[1];
   console.log(token);
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
   }
 
   if (!decodedToken) {
-    return res.status(401).json({ error: "Not Authorized" });
+    return res.status(401).json({ error: "Not Authenticated" });
   }
   req.userId = decodedToken.userId;
   next();
