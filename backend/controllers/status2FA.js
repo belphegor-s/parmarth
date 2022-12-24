@@ -1,7 +1,7 @@
 const Admin = require("../models/admin");
 
-exports.enable2FA = (req, res, next) => {
-  const { userId } = req.body;
+exports.status2FA = (req, res, next) => {
+  const { userId, status } = req.body;
 
   Admin.findById(userId)
     .then((data) => {
@@ -10,14 +10,16 @@ exports.enable2FA = (req, res, next) => {
         return "user not found";
       }
 
-      data.status2FA = true;
+      data.status2FA = status;
       return data.save();
     })
     .then((result) => {
       if (result !== "user not found") {
-        res
-          .status(200)
-          .json({ message: "Successfully enabled 2FA for this user" });
+        res.status(200).json({
+          message: `Successfully ${
+            status ? "enabled" : "disabled"
+          } 2FA for this user`,
+        });
       }
     })
     .catch((err) => {

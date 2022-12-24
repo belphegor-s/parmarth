@@ -12,7 +12,7 @@ const rteRoutes = require("./routes/rteData");
 const volunteersRoutes = require("./routes/volunteers");
 const postRoutes = require("./routes/post");
 const approveRequestRoute = require("./routes/approveRequest");
-const enable2FARoute = require("./routes/enable2FA");
+const status2FARoute = require("./routes/status2FA");
 const verify2FARoute = require("./routes/verify2FACode");
 
 const app = express();
@@ -41,7 +41,7 @@ app.use(rteRoutes);
 app.use(volunteersRoutes);
 app.use(postRoutes);
 app.use(approveRequestRoute);
-app.use(enable2FARoute);
+app.use(status2FARoute);
 app.use(verify2FARoute);
 
 mongoose

@@ -130,7 +130,7 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  Admin.find({ email: { $exists: true } }, { email: 1 })
+  Admin.find({ email: { $exists: true } }, { email: 1, status2FA: 1 })
     .then((data) => {
       if (!data) {
         return res.status(404).json({ error: "No User found" });

@@ -12,27 +12,28 @@ const ListUsers = () => {
 
   const authCtx = useContext(AuthContext);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      setIsLoading(true);
-      await fetch(`${backendUrl}/getUsers`, {
-        headers: { Authorization: "Bearer " + authCtx.token },
+  const getUsers = async () => {
+    setIsLoading(true);
+    await fetch(`${backendUrl}/getUsers`, {
+      headers: { Authorization: "Bearer " + authCtx.token },
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          return [];
+        }
+        return res.json();
       })
-        .then((res) => {
-          if (res.status !== 200) {
-            return [];
-          }
-          return res.json();
-        })
-        .then((res) => {
-          if (res === []) {
-            toast.error("Failed to load Users");
-          }
-          setData(res);
-        })
-        .catch((err) => toast.error(err.messsage));
-      setIsLoading(false);
-    };
+      .then((result) => {
+        if (result === []) {
+          toast.error("Failed to load Users");
+        }
+        setData(result);
+      })
+      .catch((err) => toast.error(err.messsage));
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
     getUsers();
   }, []);
 
@@ -51,9 +52,10 @@ const ListUsers = () => {
                 <th>S. No.</th>
                 <th>User ID</th>
                 <th>User Email</th>
+                <th>2FA Status</th>
               </tr>
               {isLoading ? (
-                <td colspan={3}>
+                <td colSpan={4}>
                   <div className={styles.loader}></div>
                 </td>
               ) : (
@@ -62,6 +64,46 @@ const ListUsers = () => {
                     <td>{index + 1}</td>
                     <td>{res._id}</td>
                     <td>{res.email}</td>
+                    <td>
+                      {res._id === localStorage.getItem("userId") ? (
+                        <button
+                          className={
+                            res.status2FA
+                              ? styles["disable-button"]
+                              : styles["enable-button"]
+                          }
+                          onClick={async () => {
+                            await fetch(`${backendUrl}/status2FA`, {
+                              method: "PATCH",
+                              headers: {
+                                "Content-Type": "application/json",
+                                Authorization: "Bearer " + authCtx.token,
+                              },
+                              body: JSON.stringify({
+                                userId: res._id,
+                                status: !res.status2FA,
+                              }),
+                            })
+                              .then((result) => result.json())
+                              .then((resData) => {
+                                if (resData.error) {
+                                  toast.error(resData.error);
+                                } else if (resData.message) {
+                                  getUsers();
+                                  toast.success(resData.message);
+                                }
+                              })
+                              .catch((err) => toast.error(err.messsage));
+                          }}
+                        >
+                          {res.status2FA ? "Disable" : "Enable 2FA"}
+                        </button>
+                      ) : res.status2FA ? (
+                        "Enabled"
+                      ) : (
+                        "Disabled"
+                      )}
+                    </td>
                   </tr>
                 ))
               )}
