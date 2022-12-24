@@ -5,7 +5,7 @@
   height: 100vh;
 }
 
-.login-card {
+.card {
   border: 2px solid #227bc0;
   border-radius: 10px;
   padding: 2rem;
@@ -23,13 +23,13 @@
   text-align: left;
 }
 
-.login-form {
+.form {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.login-inputs {
+.form > input {
   all: unset;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -41,11 +41,11 @@
   font-size: 1.2rem;
 }
 
-.login-inputs:focus {
+.form > input:focus {
   border: 1px solid #535353;
 }
 
-.login-btn {
+.form > button {
   width: 130px;
   padding: 0.5rem;
   margin: 0 auto;
@@ -59,7 +59,7 @@
   transition: all 0.3s ease-in-out;
 }
 
-.login-btn:hover {
+.form > button:hover {
   box-shadow: 0 0 10px #277bc0a2;
   opacity: 0.9;
 }
@@ -94,7 +94,7 @@
 }
 
 @media screen and (width< 520px) {
-  .login-inputs {
+  .form > input {
     width: 240px;
     padding: 0.1rem;
     font-size: 1rem;

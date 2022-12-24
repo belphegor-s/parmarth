@@ -61,6 +61,13 @@ const Login = () => {
           );
           navigate("/", { replace: true });
           toast.success("Successfully logged in");
+        } else if (
+          resData.message === "Successfully sent 2FA code to email" &&
+          resData.userId
+        ) {
+          toast.success(resData.message);
+          localStorage.setItem("userId", resData.userId);
+          navigate("/verify-code", { replace: true });
         }
       })
       .catch((err) => toast.error(err.message));

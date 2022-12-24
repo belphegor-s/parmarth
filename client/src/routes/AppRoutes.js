@@ -21,6 +21,7 @@ import Events from "../pages/Events/Events";
 import EducationalVisits from "../pages/EducationalVisits/EducationalVisits";
 import CreateUser from "../pages/CreateUser/CreateUser";
 import ListUsers from "../pages/ListUsers/ListUsers";
+import VerifyCode from "../pages/VerifyCode/VerifyCode";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
@@ -29,6 +30,9 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       {!authCtx.isLoggedIn && <Route path="/login" element={<Login />} />}
+      {!authCtx.isLoggedIn && (
+        <Route path="/verify-code" element={<VerifyCode />} />
+      )}
       <Route path="/about" element={<About />} />
       <Route path="/classes" element={<Classes />} />
       <Route path="/classes" element={<Classes />} />
