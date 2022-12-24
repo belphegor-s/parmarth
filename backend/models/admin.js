@@ -2,6 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 module.exports = mongoose.model(
   "Admin",
-  new Schema({ email: String, password: String }),
-  "admin"
+  new Schema({ email: String, password: String, status2FA: Boolean }),
+  "admin",
 );

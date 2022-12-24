@@ -11,25 +11,26 @@ const authRoutes = require("./routes/auth");
 const rteRoutes = require("./routes/rteData");
 const volunteersRoutes = require("./routes/volunteers");
 const postRoutes = require("./routes/post");
-const approveRequest = require("./routes/approveRequest");
+const approveRequestRoute = require("./routes/approveRequest");
+const enable2FARoute = require("./routes/enable2FA");
 
 const app = express();
 
 app.use(express.json());
 
 if (process.env.NODE_ENV === "development") {
-	app.use((req, res, next) => {
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.setHeader(
-			"Access-Control-Allow-Methods",
-			"OPTIONS, GET, POST, PUT, PATCH, DELETE"
-		);
-		res.setHeader(
-			"Access-Control-Allow-Headers",
-			"Content-Type, Authorization"
-		);
-		next();
-	});
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
+    next();
+  });
 }
 
 app.use("uploads", express.static(path.join(__dirname, "uploads")));
@@ -38,13 +39,14 @@ app.use(authRoutes);
 app.use(rteRoutes);
 app.use(volunteersRoutes);
 app.use(postRoutes);
-app.use(approveRequest);
+app.use(approveRequestRoute);
+app.use(enable2FARoute);
 
 mongoose
-	.connect(process.env.MONGOURI)
-	.then((result) => {
-		app.listen(PORT, () => {
-			console.log(`Express server listening on http://localhost:${PORT}`);
-		});
-	})
-	.catch((err) => console.log(err));
+  .connect(process.env.MONGOURI)
+  .then((result) => {
+    app.listen(PORT, () => {
+      console.log(`Express server listening on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => console.log(err));

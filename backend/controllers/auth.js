@@ -29,7 +29,7 @@ exports.login = (req, res, next) => {
             process.env.JWT_SECRET_KEY,
             {
               expiresIn: "1h",
-            }
+            },
           );
 
           return res.status(200).json({
@@ -71,6 +71,7 @@ exports.createUser = (req, res, next) => {
             data = new Admin({
               email: email.trim(),
               password: hash,
+              status2FA: false,
             });
 
             data

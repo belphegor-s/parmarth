@@ -52,9 +52,13 @@ const Login = () => {
           toast.error(resData.error);
         } else if (resData.token) {
           const expirationTime = new Date(
-            new Date().getTime() + resData.expiresIn * 1000
+            new Date().getTime() + resData.expiresIn * 1000,
           );
-          authCtx.login(resData.token, expirationTime.toISOString());
+          authCtx.login(
+            resData.token,
+            expirationTime.toISOString(),
+            resData.userId,
+          );
           navigate("/", { replace: true });
           toast.success("Successfully logged in");
         }

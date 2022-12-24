@@ -114,9 +114,8 @@ exports.editPost = (req, res, next) => {
   Post.findById(id)
     .then((post) => {
       if (!post) {
-        return res
-          .status(422)
-          .json({ error: "Couldn't find a post with this id" });
+        res.status(422).json({ error: "Couldn't find a post with this id" });
+        return "post not found";
       }
       post.title = title.trim();
       post.content = content.toString();
@@ -125,9 +124,11 @@ exports.editPost = (req, res, next) => {
       return post.save();
     })
     .then((result) => {
-      res
-        .status(200)
-        .json({ message: "Post Updated Successfully", post: result });
+      if (result !== "post not found") {
+        res
+          .status(200)
+          .json({ message: "Post Updated Successfully", post: result });
+      }
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
