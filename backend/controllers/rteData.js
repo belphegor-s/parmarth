@@ -54,7 +54,7 @@ exports.addRteData = (req, res, next) => {
         newStudent
           .save()
           .then(() => {
-            console.log("Added Data");
+            console.log("Data added");
             return res.status(201).json({ message: "Successfully added data" });
           })
           .catch((err) => res.status(500).json({ error: err }));

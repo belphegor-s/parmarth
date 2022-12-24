@@ -99,7 +99,7 @@ exports.approveRequest = (req, res, next) => {
               `certificate-${name}.pdf`,
             );
 
-            fs.unlink(certificatePath, (err) => {
+            fs.unlinkSync(certificatePath, (err) => {
               if (err) {
                 return res.end(err);
               } else {

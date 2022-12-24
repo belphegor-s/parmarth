@@ -3,7 +3,6 @@ const Volunteer = require("../models/volunteers");
 exports.getVolunteersData = (req, res, next) => {
   Volunteer.find()
     .then((volunteers) => {
-      console.log(volunteers);
       res.status(200).json(volunteers);
     })
     .catch((err) => res.status(500).json({ error: err.message }));

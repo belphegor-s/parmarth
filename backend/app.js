@@ -13,6 +13,7 @@ const volunteersRoutes = require("./routes/volunteers");
 const postRoutes = require("./routes/post");
 const approveRequestRoute = require("./routes/approveRequest");
 const enable2FARoute = require("./routes/enable2FA");
+const verify2FARoute = require("./routes/verify2FACode");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(volunteersRoutes);
 app.use(postRoutes);
 app.use(approveRequestRoute);
 app.use(enable2FARoute);
+app.use(verify2FARoute);
 
 mongoose
   .connect(process.env.MONGOURI)

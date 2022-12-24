@@ -6,7 +6,6 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ error: "Not Authenticated" });
   }
   const token = req.get("Authorization").split(" ")[1];
-  console.log(token);
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);

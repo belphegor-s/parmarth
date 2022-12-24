@@ -2,9 +2,8 @@ const Post = require("../models/post");
 
 exports.getPosts = (req, res, next) => {
   Post.find()
-    .then((requests) => {
-      console.log(requests);
-      res.status(200).json(requests);
+    .then((posts) => {
+      res.status(200).json(posts);
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
@@ -13,9 +12,8 @@ exports.getPostById = (req, res, next) => {
   const id = req.params.id;
 
   Post.findById(id)
-    .then((requests) => {
-      console.log(requests);
-      res.status(200).json(requests);
+    .then((post) => {
+      res.status(200).json(post);
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };

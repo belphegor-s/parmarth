@@ -4,7 +4,6 @@ const Volunteer = require("../models/volunteers");
 exports.getRequestData = (req, res, next) => {
   Request.find()
     .then((requests) => {
-      console.log(requests);
       res.status(200).json(requests);
     })
     .catch((err) => res.status(500).json({ error: err.message }));
@@ -61,7 +60,6 @@ exports.addRequestData = (req, res, next) => {
     postHolded: postHolded.trim().toUpperCase(),
   })
     .then((data) => {
-      console.log(data);
       if (!data) {
         dataExist = false;
       } else if (data.rollNumber === rollNumber) {

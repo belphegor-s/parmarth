@@ -1,6 +1,16 @@
-const jwt = require("jsonwebtoken");
 const Admin = require("../models/admin");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
+
+const transporter = nodemailer.createTransport({
+  service: "hotmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_APP_PSWD,
+  },
+});
 
 exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -20,6 +30,33 @@ exports.login = (req, res, next) => {
       if (isEqual !== "user not found") {
         if (!isEqual) {
           return res.status(422).json({ error: "Wrong Password!" });
+        } else if (loadedUser.status2FA) {
+          const authCode = Math.floor(10000000 + Math.random() * 90000000);
+
+          const details = {
+            from: process.env.EMAIL,
+            to: loadedUser.email,
+            cc: process.env.EMAIL,
+            subject: "Parmarth 2FA Authentication Code",
+            html: `<img draggable="false" src="https://drive.google.com/uc?id=1VD0pfPT3F_iTP1BgjERkub2GA-UEmAPM" width="100px" height="100px"/><p>Hi ${loadedUser.email},</p><p>Your <strong>2FA</strong> Authentication code is - <strong>${authCode}</strong></p><p>Regards,<br/>Team Parmarth</p><p><a href="https://parmarth.ietlucknow.ac.in/" target="_blank" rel="noreferrer">Parmarth Social Club</a>, IET Lucknow</p>`,
+          };
+
+          transporter.sendMail(details, (err) => {
+            if (err) {
+              return res.status(422).json({ error: err.message });
+            } else {
+              fs.writeFileSync(
+                `authCode-${loadedUser._id}.txt`,
+                authCode.toString(),
+                "utf-8",
+              );
+
+              return res.status(200).json({
+                message: "Successfully sent 2FA code to email",
+                userId: loadedUser._id,
+              });
+            }
+          });
         } else {
           const token = jwt.sign(
             {
