@@ -27,7 +27,7 @@ exports.verify2FACode = (req, res, next) => {
             },
             process.env.JWT_SECRET_KEY,
             {
-              expiresIn: "1h",
+              expiresIn: "12h",
             },
           );
 
@@ -36,7 +36,7 @@ exports.verify2FACode = (req, res, next) => {
           return res.status(200).json({
             token: token,
             userId: loadedUser._id.toString(),
-            expiresIn: 3600,
+            expiresIn: 43200,
           });
         } else {
           return res.status(422).json({ error: "2FA Code is not valid" });

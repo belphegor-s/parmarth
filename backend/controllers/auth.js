@@ -65,14 +65,14 @@ exports.login = (req, res, next) => {
             },
             process.env.JWT_SECRET_KEY,
             {
-              expiresIn: "1h",
+              expiresIn: "12h",
             },
           );
 
           return res.status(200).json({
             token: token,
             userId: loadedUser._id.toString(),
-            expiresIn: 3600,
+            expiresIn: 43200,
           });
         }
       }

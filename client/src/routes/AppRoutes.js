@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import About from "../pages/About/About";
 import Classes from "../pages/Classes/Classes";
@@ -22,9 +22,16 @@ import EducationalVisits from "../pages/EducationalVisits/EducationalVisits";
 import CreateUser from "../pages/CreateUser/CreateUser";
 import ListUsers from "../pages/ListUsers/ListUsers";
 import VerifyCode from "../pages/VerifyCode/VerifyCode";
+import toast from "react-hot-toast";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!authCtx.token) {
+      toast.success("Auto Logout Successfully");
+    }
+  }, [authCtx.token]);
 
   return (
     <Routes>
