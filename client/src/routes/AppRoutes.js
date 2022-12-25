@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import About from "../pages/About/About";
 import Classes from "../pages/Classes/Classes";
