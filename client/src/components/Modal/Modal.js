@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDom from "react-dom";
+import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
 import { IoCloseCircle } from "react-icons/io5";
 
@@ -8,7 +8,7 @@ const Modal = ({ open, children, onClose, onConfirm }) => {
     return null;
   }
 
-  return ReactDom.createPortal(
+  return ReactDOM.createPortal(
     <>
       <div className={styles.overlay}></div>
       <div className={styles.modal}>
