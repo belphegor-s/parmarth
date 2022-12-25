@@ -85,7 +85,7 @@ const ListPost = () => {
                     <td>{res.category}</td>
                     <td>
                       {new Date(res.createdAt)
-                        .toLocaleDateString([], {
+                        .toLocaleDateString("en-IN", {
                           hour: "2-digit",
                           minute: "2-digit",
                           hour12: true,
@@ -97,7 +97,7 @@ const ListPost = () => {
                     </td>
                     <td>
                       {new Date(res.lastUpdated)
-                        .toLocaleDateString([], {
+                        .toLocaleDateString("en-IN", {
                           hour: "2-digit",
                           minute: "2-digit",
                           hour12: true,
@@ -141,7 +141,7 @@ const ListPost = () => {
                               } else if (resData.message) {
                                 toast.success(resData.message);
                                 setData(
-                                  data.filter((data) => data._id !== res._id)
+                                  data.filter((data) => data._id !== res._id),
                                 );
                               }
                             })
