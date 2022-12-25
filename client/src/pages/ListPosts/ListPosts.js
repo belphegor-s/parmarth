@@ -7,32 +7,36 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import backendUrl from "../../backendUrl";
+import Modal from "../../components/Modal/Modal";
 
 const ListPost = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [postToBeDeleted, setPostToBeDeleted] = useState("");
+  const [modalState, setModalState] = useState(false);
   const authCtx = useContext(AuthContext);
 
+  const getPosts = async () => {
+    setIsLoading(true);
+    await fetch(`${backendUrl}/getPosts`)
+      .then((res) => {
+        if (res.status !== 200) {
+          return [];
+        }
+        return res.json();
+      })
+      .then((res) => {
+        if (res === []) {
+          toast.error("Failed to load Posts");
+        }
+        setData(res);
+      })
+      .catch((err) => toast.error(err.message));
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    const getPosts = async () => {
-      setIsLoading(true);
-      await fetch(`${backendUrl}/getPosts`)
-        .then((res) => {
-          if (res.status !== 200) {
-            return [];
-          }
-          return res.json();
-        })
-        .then((res) => {
-          if (res === []) {
-            toast.error("Failed to load Posts");
-          }
-          setData(res);
-        })
-        .catch((err) => toast.error(err.message));
-      setIsLoading(false);
-    };
     getPosts();
   }, []);
 
@@ -126,26 +130,9 @@ const ListPost = () => {
                     <td>
                       <button
                         className={styles["delete-button"]}
-                        onClick={async () => {
-                          await fetch(`${backendUrl}/deletePost/` + res._id, {
-                            headers: {
-                              Authorization: "Bearer " + authCtx.token,
-                              "Content-Type": "application/json",
-                            },
-                            method: "DELETE",
-                          })
-                            .then((res) => res.json())
-                            .then((resData) => {
-                              if (resData.error) {
-                                toast.error(resData.error);
-                              } else if (resData.message) {
-                                toast.success(resData.message);
-                                setData(
-                                  data.filter((data) => data._id !== res._id),
-                                );
-                              }
-                            })
-                            .catch((err) => console.log(err));
+                        onClick={() => {
+                          setPostToBeDeleted(res._id);
+                          setModalState(true);
                         }}
                       >
                         Delete Post
@@ -166,6 +153,51 @@ const ListPost = () => {
           </div>
         </div>
       </div>
+      <Modal
+        open={modalState}
+        onClose={() => {
+          setModalState(false);
+          setPostToBeDeleted("");
+        }}
+        onConfirm={async () => {
+          await fetch(`${backendUrl}/deletePost/` + postToBeDeleted, {
+            headers: {
+              Authorization: "Bearer " + authCtx.token,
+              "Content-Type": "application/json",
+            },
+            method: "DELETE",
+          })
+            .then((res) => res.json())
+            .then((resData) => {
+              if (resData.error) {
+                toast.error(resData.error);
+              } else if (resData.message) {
+                toast.success(resData.message);
+                getPosts();
+              }
+              setModalState(false);
+            })
+            .catch((err) => console.log(err));
+        }}
+      >
+        <div
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "600",
+            color: "#db1b1b",
+          }}
+        >
+          Confirm Delete
+        </div>
+        <p
+          style={{
+            color: "#db1b1b",
+          }}
+        >
+          This Operation is irreversible
+        </p>
+        <br />
+      </Modal>
       <Footer />
     </>
   );

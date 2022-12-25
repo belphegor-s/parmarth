@@ -23,6 +23,7 @@ import CreateUser from "../pages/CreateUser/CreateUser";
 import ListUsers from "../pages/ListUsers/ListUsers";
 import VerifyCode from "../pages/VerifyCode/VerifyCode";
 import toast from "react-hot-toast";
+import Test from "../pages/Test";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
@@ -36,6 +37,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/test" element={<Test />} />
       {!authCtx.isLoggedIn && <Route path="/login" element={<Login />} />}
       {!authCtx.isLoggedIn && (
         <Route path="/verify-code" element={<VerifyCode />} />
