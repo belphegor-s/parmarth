@@ -53,9 +53,10 @@ const ListUsers = () => {
                 <th>User ID</th>
                 <th>User Email</th>
                 <th>2FA Status</th>
+                <th>Action</th>
               </tr>
               {isLoading ? (
-                <td colSpan={4}>
+                <td colSpan={5}>
                   <div className={styles.loader}></div>
                 </td>
               ) : (
@@ -64,6 +65,17 @@ const ListUsers = () => {
                     <td>{index + 1}</td>
                     <td>{res._id}</td>
                     <td>{res.email}</td>
+                    <td>
+                      {res.status2FA ? (
+                        <div style={{ color: "green", fontWeight: "700" }}>
+                          Enabled
+                        </div>
+                      ) : (
+                        <div style={{ color: "red", fontWeight: "700" }}>
+                          Disabled
+                        </div>
+                      )}
+                    </td>
                     <td>
                       {res._id === localStorage.getItem("userId") ? (
                         <button
@@ -98,10 +110,8 @@ const ListUsers = () => {
                         >
                           {res.status2FA ? "Disable" : "Enable 2FA"}
                         </button>
-                      ) : res.status2FA ? (
-                        "Enabled"
                       ) : (
-                        "Disabled"
+                        "Not Allowed"
                       )}
                     </td>
                   </tr>
