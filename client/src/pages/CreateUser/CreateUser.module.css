@@ -70,6 +70,37 @@
   margin: auto;
 }
 
+.dropdown {
+  color: #535353;
+  padding: 0.5rem;
+  padding-right: 2rem;
+  font-size: 18px;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("../../assets/img/down.png") 98% / 6% no-repeat #fff;
+  background-size: 12px 12px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.dropdown > option {
+  font-family: monospace;
+  color: #000;
+  font-size: 16px;
+}
+
+.dropdown:focus {
+  box-shadow: 0 0 10px #277bc0a2;
+}
+
+.dropdown::-ms-expand {
+  display: none;
+}
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);

@@ -6,6 +6,9 @@ let logoutTimer;
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
+  userType: "",
+  fillUserType: (userType) => {},
+  nullUserType: () => {},
   login: (token) => {},
   logout: () => {},
 });
@@ -45,6 +48,10 @@ export const AuthContextProvider = (props) => {
   }
   const [token, setToken] = useState(initToken);
   const userIsLoggedIn = !!token;
+  const [userType, setUserType] = useState("");
+
+  const fillUserType = (userType) => setUserType(userType);
+  const nullUserType = () => setUserType("");
 
   const logoutHandler = useCallback(() => {
     setToken(null);
@@ -77,6 +84,9 @@ export const AuthContextProvider = (props) => {
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    userType: userType,
+    fillUserType,
+    nullUserType,
   };
 
   return (

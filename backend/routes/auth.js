@@ -6,5 +6,6 @@ const isAuth = require("../middleware/is-auth");
 router.post("/api/login", authController.login);
 router.post("/api/createUser", isAuth, authController.createUser);
 router.get("/api/getUsers", isAuth, authController.getUsers);
+router.get("/api/getUserType/:id", authController.getUserType);
 
 module.exports = router;

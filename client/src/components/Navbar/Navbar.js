@@ -12,6 +12,7 @@ const Navbar = () => {
   const pathname = location.pathname;
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
+  const userType = authCtx.userType;
 
   const [width, setWidth] = useState(window.innerWidth);
   const [showMoreDropdown, setShowMoreDropdown] = useState(false);
@@ -246,106 +247,130 @@ const Navbar = () => {
             {showAdminsDropdown && (
               <div className={styles.dropdown}>
                 <ul>
-                  <li>
-                    <NavLink
-                      to="/request-received"
-                      className={
-                        pathname === "/request-received"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Requests Received
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/add-rte-data"
-                      className={
-                        pathname === "/add-rte-data"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Add RTE Data
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/volunteers-data"
-                      className={
-                        pathname === "/volunteers-data"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Get Volunteers Data
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/add-volunteer-data"
-                      className={
-                        pathname === "/add-volunteer-data"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Add Volunteer Data
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/create-post"
-                      className={
-                        pathname === "/create-post"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Create Post
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/list-posts"
-                      className={
-                        pathname === "/list-posts" ? styles.active : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      List Posts
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/create-user"
-                      className={
-                        pathname === "/create-user"
-                          ? styles.active
-                          : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      Create User
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/list-users"
-                      className={
-                        pathname === "/list-users" ? styles.active : styles.link
-                      }
-                      style={{ fontSize: "18px" }}
-                    >
-                      List Users
-                    </NavLink>
-                  </li>
+                  {(userType === "master" || userType === "teachers") && (
+                    <li>
+                      <NavLink
+                        to="/request-received"
+                        className={
+                          pathname === "/request-received"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Requests Received
+                      </NavLink>
+                    </li>
+                  )}
+                  {(userType === "master" || userType === "teachers") && (
+                    <li>
+                      <NavLink
+                        to="/add-rte-data"
+                        className={
+                          pathname === "/add-rte-data"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Add RTE Data
+                      </NavLink>
+                    </li>
+                  )}
+                  {(userType === "master" || userType === "teachers") && (
+                    <li>
+                      <NavLink
+                        to="/volunteers-data"
+                        className={
+                          pathname === "/volunteers-data"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Get Volunteers Data
+                      </NavLink>
+                    </li>
+                  )}
+                  {(userType === "master" ||
+                    userType === "teachers" ||
+                    userType === "media") && (
+                    <li>
+                      <NavLink
+                        to="/add-volunteer-data"
+                        className={
+                          pathname === "/add-volunteer-data"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Add Volunteer Data
+                      </NavLink>
+                    </li>
+                  )}
+                  {(userType === "master" || userType === "media") && (
+                    <li>
+                      <NavLink
+                        to="/create-post"
+                        className={
+                          pathname === "/create-post"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Create Post
+                      </NavLink>
+                    </li>
+                  )}
+                  {(userType === "master" ||
+                    userType === "media" ||
+                    userType === "teachers") && (
+                    <li>
+                      <NavLink
+                        to="/list-posts"
+                        className={
+                          pathname === "/list-posts"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        List Posts
+                      </NavLink>
+                    </li>
+                  )}
+                  {userType === "master" && (
+                    <li>
+                      <NavLink
+                        to="/create-user"
+                        className={
+                          pathname === "/create-user"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        Create User
+                      </NavLink>
+                    </li>
+                  )}
+                  {userType === "master" && (
+                    <li>
+                      <NavLink
+                        to="/list-users"
+                        className={
+                          pathname === "/list-users"
+                            ? styles.active
+                            : styles.link
+                        }
+                        style={{ fontSize: "18px" }}
+                      >
+                        List Users
+                      </NavLink>
+                    </li>
+                  )}
                 </ul>
               </div>
             )}

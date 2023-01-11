@@ -52,19 +52,30 @@ const ListUsers = () => {
                 <th>S. No.</th>
                 <th>User ID</th>
                 <th>User Email</th>
+                <th>User Type</th>
                 <th>2FA Status</th>
                 <th>Action</th>
               </tr>
               {isLoading ? (
-                <td colSpan={5}>
+                <td colSpan={6}>
                   <div className={styles.loader}></div>
                 </td>
               ) : (
                 data.map((res, index) => (
-                  <tr key={res._id}>
+                  <tr
+                    key={res._id}
+                    style={
+                      localStorage.getItem("userId") === res._id
+                        ? { backgroundColor: "yellow" }
+                        : null
+                    }
+                  >
                     <td>{index + 1}</td>
                     <td>{res._id}</td>
                     <td>{res.email}</td>
+                    <td>
+                      <strong>{res.userType}</strong>
+                    </td>
                     <td>
                       {res.status2FA ? (
                         <div style={{ color: "green", fontWeight: "700" }}>
@@ -76,43 +87,39 @@ const ListUsers = () => {
                         </div>
                       )}
                     </td>
-                    <td>
-                      {res._id === localStorage.getItem("userId") ? (
-                        <button
-                          className={
-                            res.status2FA
-                              ? styles["disable-button"]
-                              : styles["enable-button"]
-                          }
-                          onClick={async () => {
-                            await fetch(`${backendUrl}/status2FA`, {
-                              method: "PATCH",
-                              headers: {
-                                "Content-Type": "application/json",
-                                Authorization: "Bearer " + authCtx.token,
-                              },
-                              body: JSON.stringify({
-                                userId: res._id,
-                                status: !res.status2FA,
-                              }),
+                    <td style={{ backgroundColor: "#ffffff" }}>
+                      <button
+                        className={
+                          res.status2FA
+                            ? styles["disable-button"]
+                            : styles["enable-button"]
+                        }
+                        onClick={async () => {
+                          await fetch(`${backendUrl}/status2FA`, {
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                              Authorization: "Bearer " + authCtx.token,
+                            },
+                            body: JSON.stringify({
+                              userId: res._id,
+                              status: !res.status2FA,
+                            }),
+                          })
+                            .then((result) => result.json())
+                            .then((resData) => {
+                              if (resData.error) {
+                                toast.error(resData.error);
+                              } else if (resData.message) {
+                                getUsers();
+                                toast.success(resData.message);
+                              }
                             })
-                              .then((result) => result.json())
-                              .then((resData) => {
-                                if (resData.error) {
-                                  toast.error(resData.error);
-                                } else if (resData.message) {
-                                  getUsers();
-                                  toast.success(resData.message);
-                                }
-                              })
-                              .catch((err) => toast.error(err.messsage));
-                          }}
-                        >
-                          {res.status2FA ? "Disable" : "Enable 2FA"}
-                        </button>
-                      ) : (
-                        "Not Allowed"
-                      )}
+                            .catch((err) => toast.error(err.messsage));
+                        }}
+                      >
+                        {res.status2FA ? "Disable" : "Enable 2FA"}
+                      </button>
                     </td>
                   </tr>
                 ))

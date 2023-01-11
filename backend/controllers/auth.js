@@ -72,6 +72,7 @@ exports.login = (req, res, next) => {
           return res.status(200).json({
             token: token,
             userId: loadedUser._id.toString(),
+            userType: loadedUser.userType,
             expiresIn: 43200,
           });
         }
@@ -81,12 +82,23 @@ exports.login = (req, res, next) => {
 };
 
 exports.createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, userType } = req.body;
 
   const isEmailValid = (email) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   const isPasswordValid = (password) => password.length >= 8;
+
+  const isUserTypeValid = (userType) => {
+    switch (userType) {
+      case "teachers":
+      case "media":
+      case "master":
+        return true;
+      default:
+        return false;
+    }
+  };
 
   if (!isEmailValid(email)) {
     return res.status(500).send({ error: "Enter a valid email address" });
@@ -96,6 +108,10 @@ exports.createUser = (req, res, next) => {
     return res
       .status(500)
       .send({ error: "Password should be at least 8 characters" });
+  }
+
+  if (!isUserTypeValid(userType)) {
+    return res.status(500).send({ error: "Select a valid User Type" });
   }
 
   Admin.findOne({ email: email })
@@ -130,7 +146,39 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  Admin.find({ email: { $exists: true } }, { email: 1, status2FA: 1 })
+  Admin.find(
+    { email: { $exists: true } },
+    { email: 1, status2FA: 1, userType: 1 },
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({ error: "No User found" });
+      } else if (data) {
+        return res.status(200).json(data);
+      }
+    })
+    .catch((err) => res.status(500).json({ error: err }));
+};
+
+exports.getUsers = (req, res, next) => {
+  Admin.find(
+    { email: { $exists: true } },
+    { email: 1, status2FA: 1, userType: 1 },
+  )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({ error: "No User found" });
+      } else if (data) {
+        return res.status(200).json(data);
+      }
+    })
+    .catch((err) => res.status(500).json({ error: err }));
+};
+
+exports.getUserType = (req, res, next) => {
+  const { id } = req.params;
+
+  Admin.findOne({ _id: id }, { _id: 0, userType: 1 })
     .then((data) => {
       if (!data) {
         return res.status(404).json({ error: "No User found" });

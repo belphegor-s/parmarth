@@ -36,9 +36,10 @@ th {
 }
 
 .enable-button {
+  width: 100px;
   border: 1px solid #277bc0;
   outline: none;
-  background-color: transparent;
+  background-color: #fff;
   color: #277bc0;
   cursor: pointer;
   padding: 5px 10px;
@@ -53,9 +54,10 @@ th {
 }
 
 .disable-button {
+  width: 100px;
   border: 1px solid #ff6464;
   outline: none;
-  background-color: transparent;
+  background-color: #fff;
   color: #ff6464;
   cursor: pointer;
   padding: 5px 10px;

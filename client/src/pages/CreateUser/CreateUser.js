@@ -11,6 +11,7 @@ const CreateUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [userType, setUserType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const authCtx = useContext(AuthContext);
@@ -20,6 +21,17 @@ const CreateUser = () => {
 
   const isPasswordValid = (password) => password.length >= 8;
   const isPasswordSame = () => password === confirmPassword;
+
+  const isUserTypeValid = (userType) => {
+    switch (userType) {
+      case "teachers":
+      case "media":
+      case "master":
+        return true;
+      default:
+        return false;
+    }
+  };
 
   const createUserClickHandler = async (e) => {
     e.preventDefault();
@@ -43,6 +55,12 @@ const CreateUser = () => {
       return;
     }
 
+    if (!isUserTypeValid(userType)) {
+      toast.error("Select a Valid User Type");
+      setIsLoading(false);
+      return;
+    }
+
     await fetch(`${backendUrl}/createUser`, {
       method: "POST",
       headers: {
@@ -52,6 +70,7 @@ const CreateUser = () => {
       body: JSON.stringify({
         email: email,
         password: password,
+        userType: userType,
       }),
     })
       .then((res) => {
@@ -85,6 +104,23 @@ const CreateUser = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <label for="user-type" className={styles.label}>
+            Select User Type
+          </label>
+          <select
+            required
+            id="user-type"
+            defaultValue="choose"
+            className={styles.dropdown}
+            onChange={(e) => setUserType(e.target.value)}
+          >
+            <option disabled hidden value="choose">
+              Select
+            </option>
+            <option value="teachers">Teachers</option>
+            <option value="media">Media Team</option>
+            <option value="master">Master Admin User</option>
+          </select>
           <label for="password" className={styles.label}>
             Password
           </label>

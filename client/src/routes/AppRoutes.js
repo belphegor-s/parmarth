@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import About from "../pages/About/About";
 import Classes from "../pages/Classes/Classes";
@@ -22,9 +22,27 @@ import EducationalVisits from "../pages/EducationalVisits/EducationalVisits";
 import CreateUser from "../pages/CreateUser/CreateUser";
 import ListUsers from "../pages/ListUsers/ListUsers";
 import VerifyCode from "../pages/VerifyCode/VerifyCode";
+import backendUrl from "../backendUrl";
+import toast from "react-hot-toast";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
+  const userType = authCtx.userType;
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      const userId = localStorage.getItem("userId");
+      (async () => {
+        await fetch(`${backendUrl}/getUserType/${userId}`)
+          .then((res) => res.json())
+          .then((resData) => {
+            authCtx.fillUserType(resData.userType);
+          })
+          .catch((err) => toast.error(err.message));
+      })();
+    }
+    console.log(userType);
+  });
 
   return (
     <Routes>
@@ -45,32 +63,45 @@ const AppRoutes = () => {
       />
       <Route path="/rte-data" element={<RteData />} />
       <Route path="/rte-data/:academicYear" element={<RteData />} />
-      {authCtx.isLoggedIn && (
-        <Route path="/add-rte-data" element={<AddRteData />} />
-      )}
-      {authCtx.isLoggedIn && (
-        <Route path="/create-post" element={<CreatePost />} />
-      )}
-      {authCtx.isLoggedIn && (
-        <Route path="/edit-post/:id" element={<EditPost />} />
-      )}
-      {authCtx.isLoggedIn && (
-        <Route path="/list-posts" element={<ListPost />} />
-      )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" || userType === "teachers") && (
+          <Route path="/add-rte-data" element={<AddRteData />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" || userType === "media") && (
+          <Route path="/create-post" element={<CreatePost />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" ||
+          userType === "media" ||
+          userType === "teachers") && (
+          <Route path="/edit-post/:id" element={<EditPost />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" ||
+          userType === "media" ||
+          userType === "teachers") && (
+          <Route path="/list-posts" element={<ListPost />} />
+        )}
       {authCtx.isLoggedIn && <Route path="/post/:id" element={<Post />} />}
-      {authCtx.isLoggedIn && (
-        <Route path="/request-received" element={<RequestReceived />} />
-      )}
-      {authCtx.isLoggedIn && (
-        <Route path="/volunteers-data" element={<Volunteers />} />
-      )}
-      {authCtx.isLoggedIn && (
-        <Route path="/add-volunteer-data" element={<AddVolunteerData />} />
-      )}
-      {authCtx.isLoggedIn && (
+      {authCtx.isLoggedIn &&
+        (userType === "master" || userType === "teachers") && (
+          <Route path="/request-received" element={<RequestReceived />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" || userType === "teachers") && (
+          <Route path="/volunteers-data" element={<Volunteers />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" ||
+          userType === "teachers" ||
+          userType === "media") && (
+          <Route path="/add-volunteer-data" element={<AddVolunteerData />} />
+        )}
+      {authCtx.isLoggedIn && userType === "master" && (
         <Route path="/create-user" element={<CreateUser />} />
       )}
-      {authCtx.isLoggedIn && (
+      {authCtx.isLoggedIn && userType === "master" && (
         <Route path="/list-users" element={<ListUsers />} />
       )}
       <Route path="*" element={<NotFound />} />
