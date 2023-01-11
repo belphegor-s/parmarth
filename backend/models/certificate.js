@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const requestSchema = new Schema({
+const certificateSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -20,7 +20,7 @@ const requestSchema = new Schema({
   },
   purpose: {
     type: String,
-    require: true,
+    required: true,
   },
   postHolded: {
     type: String,
@@ -28,10 +28,10 @@ const requestSchema = new Schema({
   event: {
     type: String,
   },
-  dataExist: {
-    type: Boolean,
+  certificateNumber: {
+    type: Number,
     required: true,
   },
 });
 
-module.exports = mongoose.model("Request", requestSchema);
+module.exports = mongoose.model("Certificate", certificateSchema);

@@ -11,7 +11,15 @@ exports.getRequestData = (req, res, next) => {
 
 exports.addRequestData = (req, res, next) => {
   // Validation
-  const { name, email, branch, rollNumber, postHolded } = req.body;
+  const { name, email, branch, rollNumber, purpose } = req.body;
+
+  var postHolded = "",
+    event = "";
+  if (purpose === "general") {
+    postHolded = req.body.postHolded;
+  } else if (purpose === "event") {
+    event = req.body.event;
+  }
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
 
@@ -40,6 +48,16 @@ exports.addRequestData = (req, res, next) => {
   const isPostHoldedValid = (postHolded) =>
     typeof postHolded === "string" && postHolded.trim().length > 0;
 
+  const isEventValid = (event) => {
+    switch (event) {
+      case "muskan":
+      case "udgam":
+        return true;
+      default:
+        return false;
+    }
+  };
+
   if (!isNameValid(name)) {
     return res.status(422).json({ error: "Enter a valid name" });
   } else if (!isEmailValid(email)) {
@@ -48,8 +66,16 @@ exports.addRequestData = (req, res, next) => {
     return res.status(422).json({ error: "Enter a valid roll number" });
   } else if (!isBranchValid(branch)) {
     return res.status(422).json({ error: "Enter your branch" });
-  } else if (!isPostHoldedValid(postHolded)) {
-    return res.status(422).json({ error: "Enter Post Holded" });
+  }
+
+  if (purpose === "general") {
+    if (!isPostHoldedValid(postHolded)) {
+      return res.status(422).json({ error: "Enter your Post" });
+    }
+  } else if (purpose === "event") {
+    if (!isEventValid(event)) {
+      return res.status(422).json({ error: "Select a valid Event" });
+    }
   }
 
   var dataExist = null;
@@ -57,7 +83,6 @@ exports.addRequestData = (req, res, next) => {
     name: name.trim().toUpperCase(),
     branch: branch.trim(),
     rollNumber: +rollNumber,
-    postHolded: postHolded.trim().toUpperCase(),
   })
     .then((data) => {
       if (!data) {
@@ -74,7 +99,9 @@ exports.addRequestData = (req, res, next) => {
               email: email.trim(),
               branch: branch.trim(),
               rollNumber: +rollNumber,
-              postHolded: postHolded.trim().toUpperCase(),
+              purpose: purpose.trim(),
+              ...(purpose === "general" && { postHolded: postHolded }),
+              ...(purpose === "event" && { event: event }),
               dataExist: dataExist,
             });
             if (requestData.dataExist === null) {

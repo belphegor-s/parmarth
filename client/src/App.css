@@ -18,3 +18,7 @@
 .back-to-top-button:hover {
   background-color: #1e6299;
 }
+
+button {
+  outline: none;
+}

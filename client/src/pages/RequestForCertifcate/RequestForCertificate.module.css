@@ -40,7 +40,7 @@
   box-shadow: 0 0 10px #277bc0a2;
 }
 
-.branch-dropdown {
+.dropdown {
   color: #535353;
   padding: 0.5rem;
   padding-right: 2rem;
@@ -57,17 +57,17 @@
   margin-bottom: 2rem;
 }
 
-.branch-dropdown > option {
+.dropdown > option {
   font-family: monospace;
   color: #000;
   font-size: 16px;
 }
 
-.branch-dropdown:focus {
+.dropdown:focus {
   box-shadow: 0 0 10px #277bc0a2;
 }
 
-.branch-dropdown::-ms-expand {
+.dropdown::-ms-expand {
   display: none;
 }
 
@@ -88,6 +88,30 @@
 .submit:hover {
   box-shadow: 0 0 10px #277bc0a2;
   opacity: 0.9;
+}
+
+.btn {
+  width: 150px;
+  border: 2px solid #277bc0;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #277bc0;
+  font-size: 20px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin: 0 auto;
+  margin-top: 1rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.btn:hover {
+  box-shadow: 0 0 10px #277bc0a2;
+  opacity: 0.9;
+}
+
+.btn-active {
+  background-color: #277bc0;
+  color: #fff;
 }
 
 .loader {

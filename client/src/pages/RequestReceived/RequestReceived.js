@@ -55,8 +55,8 @@ const RequestReceived = () => {
                 <th>Name</th>
                 <th>Branch</th>
                 <th>Roll Number</th>
-                <th>Post Holded</th>
                 <th>Email</th>
+                <th>Purpose</th>
                 <th>Data Exist</th>
                 <th>Approve Request</th>
                 <th>Reject Request</th>
@@ -72,8 +72,24 @@ const RequestReceived = () => {
                     <td>{res.name}</td>
                     <td>{res.branch}</td>
                     <td>{res.rollNumber}</td>
-                    <td>{res.postHolded}</td>
                     <td>{res.email}</td>
+                    <td>
+                      {res.purpose === "general" ? (
+                        <span>
+                          <strong>
+                            {res.purpose.toUpperCase()}
+                            <br />
+                            POST:{" "}
+                          </strong>
+                          {res.postHolded}
+                        </span>
+                      ) : (
+                        <span>
+                          <strong>{res.purpose.toUpperCase()} - </strong>
+                          {res.event.toUpperCase()}
+                        </span>
+                      )}
+                    </td>
                     <td>
                       {res.dataExist ? (
                         <ImCheckmark color="#38E54D" size={20} />
@@ -94,7 +110,7 @@ const RequestReceived = () => {
                                 Authorization: "Bearer " + authCtx.token,
                               },
                               method: "POST",
-                            }
+                            },
                           )
                             .then((res) => res.json())
                             .then(async (resData) => {
@@ -110,7 +126,7 @@ const RequestReceived = () => {
                                       Authorization: "Bearer " + authCtx.token,
                                     },
                                     method: "DELETE",
-                                  }
+                                  },
                                 )
                                   .then((res) => res.json())
                                   .then((resData) => {
@@ -119,8 +135,8 @@ const RequestReceived = () => {
                                     } else if (resData.message) {
                                       setData(
                                         data.filter(
-                                          (data) => data._id !== res._id
-                                        )
+                                          (data) => data._id !== res._id,
+                                        ),
                                       );
                                       console.log(resData.message);
                                     }
@@ -147,7 +163,7 @@ const RequestReceived = () => {
                                 Authorization: "Bearer " + authCtx.token,
                               },
                               method: "DELETE",
-                            }
+                            },
                           )
                             .then((res) => res.json())
                             .then((resData) => {
@@ -155,7 +171,7 @@ const RequestReceived = () => {
                                 toast.error(resData.error);
                               } else if (resData.message) {
                                 setData(
-                                  data.filter((data) => data._id !== res._id)
+                                  data.filter((data) => data._id !== res._id),
                                 );
                                 toast.success(resData.message);
                               }

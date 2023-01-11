@@ -11,6 +11,8 @@ const RequestForCertificate = () => {
   const [rollNumber, setRollNumber] = useState(0);
   const [branch, setBranch] = useState("");
   const [postHolded, setPostHolded] = useState("");
+  const [purpose, setPurpose] = useState("general");
+  const [event, setEvent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
@@ -40,6 +42,16 @@ const RequestForCertificate = () => {
   const isPostHoldedValid = (postHolded) =>
     typeof postHolded === "string" && postHolded.trim().length > 0;
 
+  const isEventValid = (event) => {
+    switch (event) {
+      case "muskan":
+      case "udgam":
+        return true;
+      default:
+        return false;
+    }
+  };
+
   const onFormSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -61,10 +73,20 @@ const RequestForCertificate = () => {
       toast.error("Select a branch");
       setIsLoading(false);
       return;
-    } else if (!isPostHoldedValid(postHolded)) {
-      toast.error("Enter your Post");
-      setIsLoading(false);
-      return;
+    }
+
+    if (purpose === "general") {
+      if (!isPostHoldedValid(postHolded)) {
+        toast.error("Enter your Post");
+        setIsLoading(false);
+        return;
+      }
+    } else if (purpose === "event") {
+      if (!isEventValid(event)) {
+        toast.error("Select a valid Event");
+        setIsLoading(false);
+        return;
+      }
     }
 
     const data = {
@@ -72,7 +94,9 @@ const RequestForCertificate = () => {
       email: email,
       rollNumber: +rollNumber,
       branch: branch,
-      postHolded: postHolded,
+      purpose: purpose,
+      ...(purpose === "general" && { postHolded: postHolded }),
+      ...(purpose === "event" && { event: event }),
     };
 
     await fetch(`${backendUrl}/addRequestData`, {
@@ -132,7 +156,7 @@ const RequestForCertificate = () => {
             required
             id="branch"
             defaultValue="choose"
-            className={styles["branch-dropdown"]}
+            className={styles.dropdown}
             onChange={(e) => setBranch(e.target.value)}
           >
             <option disabled hidden value="choose">
@@ -151,14 +175,67 @@ const RequestForCertificate = () => {
             <option value="IT">IT - Information Technology</option>
             <option value="ME">ME - Mechanical Engineering</option>
           </select>
-          <label for="post-holded">Post Holded</label>
-          <input
-            required
-            id="post-holded"
-            type="text"
-            placeholder="e.g. Volunteer"
-            onChange={(e) => setPostHolded(e.target.value)}
-          />
+          <label for="purpose">Select Purpose</label>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: "2rem",
+            }}
+          >
+            <button
+              className={`${styles.btn} ${
+                purpose === "general" ? styles["btn-active"] : ""
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setPurpose("general");
+              }}
+            >
+              General
+            </button>
+            <button
+              className={`${styles.btn} ${
+                purpose === "event" ? styles["btn-active"] : ""
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setPurpose("event");
+              }}
+            >
+              Event
+            </button>
+          </div>
+          {purpose === "general" && (
+            <>
+              <label for="post-holded">Post Holded</label>
+              <input
+                required
+                id="post-holded"
+                type="text"
+                placeholder="e.g. Volunteer"
+                onChange={(e) => setPostHolded(e.target.value)}
+              />
+            </>
+          )}
+          {purpose === "event" && (
+            <>
+              <label for="event-selection">Select Event</label>
+              <select
+                required
+                id="event-selection"
+                defaultValue="choose"
+                className={styles.dropdown}
+                onChange={(e) => setEvent(e.target.value)}
+              >
+                <option disabled hidden value="choose">
+                  Select Event
+                </option>
+                <option value="muskan">Muskan</option>
+                <option value="udgam">Udgam</option>
+              </select>
+            </>
+          )}
 
           <button type="submit" className={styles.submit}>
             {isLoading ? <div className={styles.loader}></div> : "Submit"}

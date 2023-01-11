@@ -3,6 +3,8 @@ const fs = require("fs");
 const PDFDocument = require("pdfkit");
 const SVGtoPDF = require("svg-to-pdfkit");
 const path = require("path");
+const toTitleCase = require("../util/titleCaseConverter");
+const Certificate = require("../models/certificate");
 
 const { createSVGWindow } = require("svgdom");
 const window = createSVGWindow();
@@ -35,12 +37,6 @@ exports.approveRequest = (req, res, next) => {
     })
     .then((data) => {
       if (data !== "user not found") {
-        function toTitleCase(str) {
-          return str.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-          });
-        }
-
         const name = toTitleCase(data.name);
 
         const doc = new PDFDocument({
@@ -69,6 +65,10 @@ exports.approveRequest = (req, res, next) => {
           .attr("x", "32.5%")
           .attr("y", "82%");
 
+        const certificateNumber = Math.floor(
+          Math.pow(10, 15 - 1) + Math.random() * 9 * Math.pow(10, 15 - 1),
+        );
+
         SVGtoPDF(doc, certificate);
         SVGtoPDF(doc, nameSVG.svg());
         SVGtoPDF(doc, dateSVG.svg());
@@ -90,25 +90,71 @@ exports.approveRequest = (req, res, next) => {
         };
 
         transporter.sendMail(details, (err) => {
-          if (err) {
-            return res.status(422).json({ error: err.message });
-          } else {
-            const certificatePath = path.join(
-              __dirname,
-              "../",
-              `certificate-${name}.pdf`,
-            );
+          // if (err) {
+          //   return res.status(422).json({ error: err.message });
+          // } else {
+          const certificatePath = path.join(
+            __dirname,
+            "../",
+            `certificate-${name}.pdf`,
+          );
 
-            fs.unlinkSync(certificatePath, (err) => {
-              if (err) {
-                return res.end(err);
-              } else {
-                console.log("certificate deleted");
+          var certificateIssued = false;
+
+          Certificate.findOne({
+            name: data.name,
+            email: data.email,
+            branch: data.branch,
+            rollNumber: data.rollNumber,
+            purpose: data.purpose,
+            ...(data.purpose === "general" && { postHolded: data.postHolded }),
+            ...(data.purpose === "event" && { event: data.event }),
+          })
+            .then((res) => {
+              if (!res) {
+                const certificateData = new Certificate({
+                  name: data.name.trim().toUpperCase(),
+                  email: data.email.trim(),
+                  branch: data.branch.trim(),
+                  rollNumber: +data.rollNumber,
+                  purpose: data.purpose.trim(),
+                  certificateNumber: certificateNumber,
+                  ...(data.purpose === "general" && {
+                    postHolded: data.postHolded,
+                  }),
+                  ...(data.purpose === "event" && { event: data.event }),
+                });
+
+                certificateData
+                  .save()
+                  .then(() => {
+                    console.log("Added Data");
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              } else if (res.rollNumber === data.rollNumber) {
+                certificateIssued = true;
               }
-            });
+            })
+            .catch((err) => console.log(err));
 
+          fs.unlinkSync(certificatePath, (err) => {
+            if (err) {
+              return res.end(err);
+            } else {
+              console.log("certificate deleted");
+            }
+          });
+
+          if (certificateIssued == false) {
             return res.status(200).json({ message: "Successfully sent mail" });
+          } else {
+            return res
+              .status(200)
+              .json({ message: "Certificate already issued with same data" });
           }
+          // }
         });
       }
     })
