@@ -153,7 +153,7 @@ const MobileNav = () => {
                   }
                   style={{ fontSize: "18px" }}
                 >
-                  Articles
+                  Articles and Blogs
                 </NavLink>
               </li>
               <li>

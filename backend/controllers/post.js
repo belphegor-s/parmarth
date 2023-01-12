@@ -18,6 +18,16 @@ exports.getPostById = (req, res, next) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 };
 
+exports.getPostByCategory = (req, res, next) => {
+  const { category } = req.params;
+
+  Post.find({ category: category }, { createdAt: 0 })
+    .then((post) => {
+      res.status(200).json(post);
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+};
+
 exports.addPost = (req, res, next) => {
   const { title, content, category } = req.body;
 
@@ -25,13 +35,13 @@ exports.addPost = (req, res, next) => {
   const isContentValid = (content) => content.trim().length > 0;
   const isCategoryValid = () => {
     switch (category) {
-      case "Blog":
-      case "Event":
-      case "Medical Helps":
-      case "Article":
-      case "Donation":
-      case "Educational Visit":
-      case "Festival Celebration":
+      case "blog":
+      case "event":
+      case "medical-helps":
+      case "article":
+      case "donation":
+      case "educational-visit":
+      case "festival-celebration":
         return true;
 
       default:
@@ -85,13 +95,13 @@ exports.editPost = (req, res, next) => {
   const isContentValid = (content) => content.trim().length > 0;
   const isCategoryValid = () => {
     switch (category) {
-      case "Blog":
-      case "Event":
-      case "Medical Helps":
-      case "Article":
-      case "Donation":
-      case "Educational Visit":
-      case "Festival Celebration":
+      case "blog":
+      case "event":
+      case "medical-helps":
+      case "article":
+      case "donation":
+      case "educational-visit":
+      case "festival-celebration":
         return true;
 
       default:

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import styles from "./EducationalVisits.module.css";
+import styles from "./FestivalCelebration.module.css";
 import PostCard from "../../components/PostCard/PostCard";
 import backendUrl from "../../backendUrl";
 
-const EducationalVisits = () => {
+const FestivalCelebration = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,7 +13,7 @@ const EducationalVisits = () => {
     setIsLoading(true);
     (async () => {
       const res = await fetch(
-        `${backendUrl}/getPostByCategory/educational-visit`,
+        `${backendUrl}/getPostByCategory/festival-celebration`,
       );
       const resData = await res.json();
       setData(resData);
@@ -25,7 +25,7 @@ const EducationalVisits = () => {
     <>
       <Navbar />
       <div className={styles.body}>
-        <h1>Educational Visits</h1>
+        <h1>Festival Celebration</h1>
         <hr className={styles.hr} />
         {isLoading ? (
           <div className={styles.loader}></div>
@@ -38,4 +38,4 @@ const EducationalVisits = () => {
   );
 };
 
-export default EducationalVisits;
+export default FestivalCelebration;

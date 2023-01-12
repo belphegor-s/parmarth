@@ -24,6 +24,8 @@ import ListUsers from "../pages/ListUsers/ListUsers";
 import VerifyCode from "../pages/VerifyCode/VerifyCode";
 import backendUrl from "../backendUrl";
 import toast from "react-hot-toast";
+import FestivalCelebration from "../pages/FestivalCelebration/FestivalCelebration";
+import ArticlesAndBlogs from "../pages/ArticlesAndBlogs/ArticlesAndBlogs";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
@@ -41,7 +43,6 @@ const AppRoutes = () => {
           .catch((err) => toast.error(err.message));
       })();
     }
-    console.log(userType);
   });
 
   return (
@@ -57,6 +58,8 @@ const AppRoutes = () => {
       <Route path="/schooling" element={<Schooling />} />
       <Route path="/events" element={<Events />} />
       <Route path="/educational-visits" element={<EducationalVisits />} />
+      <Route path="/festival-celebration" element={<FestivalCelebration />} />
+      <Route path="/articles-and-blogs" element={<ArticlesAndBlogs />} />
       <Route
         path="/request-for-certificate"
         element={<RequestForCertificate />}
@@ -83,7 +86,7 @@ const AppRoutes = () => {
           userType === "teachers") && (
           <Route path="/list-posts" element={<ListPost />} />
         )}
-      {authCtx.isLoggedIn && <Route path="/post/:id" element={<Post />} />}
+      <Route path="/:category/:id" element={<Post />} />
       {authCtx.isLoggedIn &&
         (userType === "master" || userType === "teachers") && (
           <Route path="/request-received" element={<RequestReceived />} />

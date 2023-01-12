@@ -5,7 +5,6 @@ import styles from "./ListPost.module.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
-import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import backendUrl from "../../backendUrl";
 import Modal from "../../components/Modal/Modal";
 
@@ -58,28 +57,8 @@ const ListPost = () => {
                 <th>Created At</th>
                 <th>Last Updated</th>
                 <th>Show Post</th>
-                <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillEdit style={{ marginRight: "0.5rem" }} />
-                    Edit Post
-                  </div>
-                </th>
-                <th>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AiFillDelete style={{ marginRight: "0.5rem" }} />
-                    Delete Post
-                  </div>
-                </th>
+                <th>Edit Post</th>
+                <th>Delete Post</th>
               </tr>
               {data.length !== 0 ? (
                 data.map((res, index) => (
@@ -113,7 +92,7 @@ const ListPost = () => {
                     </td>
                     <td>
                       <button
-                        onClick={() => navigate(`/post/${res._id}`)}
+                        onClick={() => navigate(`/${res.category}/${res._id}`)}
                         className={styles.button}
                       >
                         Show Post

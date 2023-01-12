@@ -30,13 +30,13 @@ const PostForm = (props) => {
   const isContentValid = (content) => content.trim().length > 0;
   const isCategoryValid = () => {
     switch (category) {
-      case "Blog":
-      case "Event":
-      case "Medical Helps":
-      case "Article":
-      case "Donation":
-      case "Educational Visit":
-      case "Festival Celebration":
+      case "blog":
+      case "event":
+      case "medical-helps":
+      case "article":
+      case "donation":
+      case "educational-visit":
+      case "festival-celebration":
         return true;
 
       default:
@@ -57,6 +57,7 @@ const PostForm = (props) => {
           if (res === []) {
             toast.error("Failed to load Post Data");
           }
+          console.log(res);
           setTitle(res.title);
           setContent(res.content);
           setCategory(res.category);
@@ -65,6 +66,10 @@ const PostForm = (props) => {
     };
     if (props.function === "edit") getPostById();
   }, []);
+
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
 
   const onFormSubmitHandler = async (e) => {
     e.preventDefault();
@@ -157,6 +162,7 @@ const PostForm = (props) => {
             ref={editor}
             value={content}
             config={config}
+            onChange={(newContent) => setContent(newContent)}
             onBlur={(newContent) => setContent(newContent)}
             className={styles.content}
             tabIndex={1}
@@ -174,13 +180,13 @@ const PostForm = (props) => {
             <option disabled hidden value="choose">
               Select Category
             </option>
-            <option value="Blog">Blog</option>
-            <option value="Event">Event</option>
-            <option value="Medical Helps">Medical Helps</option>
-            <option value="Article">Article</option>
-            <option value="Donation">Donation</option>
-            <option value="Educational Visit">Educational Visit</option>
-            <option value="Festival Celebration">Festival Celebration</option>
+            <option value="blog">Blog</option>
+            <option value="event">Event</option>
+            <option value="medical-helps">Medical Helps</option>
+            <option value="article">Article</option>
+            <option value="donation">Donation</option>
+            <option value="educational-visit">Educational Visit</option>
+            <option value="festival-celebration">Festival Celebration</option>
           </select>
         </span>
         <button type="submit" className={styles.submit}>

@@ -171,11 +171,15 @@ const Navbar = () => {
               <ul>
                 <li>
                   <NavLink
-                    to="#"
-                    className={pathname === "#" ? styles.active : styles.link}
+                    to="/articles-and-blogs"
+                    className={
+                      pathname === "articles-and-blogs"
+                        ? styles.active
+                        : styles.link
+                    }
                     style={{ fontSize: "18px" }}
                   >
-                    Articles
+                    Articles and Blogs
                   </NavLink>
                 </li>
                 <li>

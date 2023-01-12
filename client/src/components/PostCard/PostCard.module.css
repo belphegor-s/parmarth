@@ -1,0 +1,37 @@
+.post-card {
+  width: 300px;
+  border: 2px solid #277bc0;
+  border-radius: 5px;
+  margin: 1.5rem 2rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 10px #535353;
+}
+
+.details {
+  padding: 0.5rem;
+}
+
+.details > h3 {
+  font-family: "Merriweather", sans-serif;
+  margin-bottom: 0;
+}
+
+.details > p {
+  background-color: aquamarine;
+  width: max-content;
+  padding: 0.2rem 0.8rem;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 576px) {
+  .post-card {
+    margin: 1rem 0;
+  }
+}
