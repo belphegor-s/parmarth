@@ -8,6 +8,7 @@ import backendUrl from "../../backendUrl";
 
 const PostForm = (props) => {
   const [title, setTitle] = useState("");
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +44,10 @@ const PostForm = (props) => {
         return false;
     }
   };
+  const isCoverPhotoValid = (coverPhotoUrl) =>
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
+      coverPhotoUrl.trim(),
+    );
 
   useEffect(() => {
     const getPostById = async () => {
@@ -61,6 +66,7 @@ const PostForm = (props) => {
           setTitle(res.title);
           setContent(res.content);
           setCategory(res.category);
+          setCoverPhotoUrl(res.coverPhotoUrl);
         })
         .catch((err) => toast.error(err.message));
     };
@@ -78,6 +84,10 @@ const PostForm = (props) => {
       toast.error("Title can't be empty");
       setIsLoading(false);
       return;
+    } else if (!isCoverPhotoValid(coverPhotoUrl)) {
+      toast.error("Enter a valid URL");
+      setIsLoading(false);
+      return;
     } else if (!isContentValid(content)) {
       toast.error("Enter at least some characters in content");
       setIsLoading(false);
@@ -90,6 +100,7 @@ const PostForm = (props) => {
 
     const data = {
       title: title,
+      coverPhotoUrl: coverPhotoUrl,
       content: content,
       category: category,
     };
@@ -154,6 +165,15 @@ const PostForm = (props) => {
           type="text"
           placeholder="Enter your post title"
           onChange={(e) => setTitle(e.target.value)}
+        />
+        <label for="cover-photo-url">Cover Photo URL</label>
+        <input
+          required
+          value={coverPhotoUrl}
+          id="cover-photo-url"
+          type="text"
+          placeholder="Enter cover photo URL"
+          onChange={(e) => setCoverPhotoUrl(e.target.value)}
         />
         <label for="content">Post Content</label>
         <div>

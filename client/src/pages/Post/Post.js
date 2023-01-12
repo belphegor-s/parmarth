@@ -84,6 +84,7 @@ const Post = () => {
                 Edit Post
               </button>
             )}
+            <img src={data.coverPhotoUrl} alt="" />
             <div
               dangerouslySetInnerHTML={{ __html: data.content }}
               style={width < 768 ? null : { padding: "0 4rem" }}

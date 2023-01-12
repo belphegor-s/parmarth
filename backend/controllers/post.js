@@ -29,7 +29,7 @@ exports.getPostByCategory = (req, res, next) => {
 };
 
 exports.addPost = (req, res, next) => {
-  const { title, content, category } = req.body;
+  const { title, content, category, coverPhotoUrl } = req.body;
 
   const isTitleValid = (title) => title.trim().length > 0;
   const isContentValid = (content) => content.trim().length > 0;
@@ -48,9 +48,15 @@ exports.addPost = (req, res, next) => {
         return false;
     }
   };
+  const isCoverPhotoValid = (coverPhotoUrl) =>
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
+      coverPhotoUrl.trim(),
+    );
 
   if (!isTitleValid(title)) {
     return res.status(422).json({ error: "Title can't be empty" });
+  } else if (!isCoverPhotoValid(coverPhotoUrl)) {
+    return res.status(422).json({ error: "Enter a valid URL" });
   } else if (!isContentValid(content)) {
     return res
       .status(422)
@@ -61,6 +67,7 @@ exports.addPost = (req, res, next) => {
 
   const post = new Post({
     title: title.trim(),
+    coverPhotoUrl: coverPhotoUrl,
     content: content.toString(),
     category: category,
     createdAt: new Date().toISOString(),
@@ -89,7 +96,7 @@ exports.addPost = (req, res, next) => {
 exports.editPost = (req, res, next) => {
   const id = req.params.id;
 
-  const { title, content, category } = req.body;
+  const { title, content, category, coverPhotoUrl } = req.body;
 
   const isTitleValid = (title) => title.trim().length > 0;
   const isContentValid = (content) => content.trim().length > 0;
@@ -108,9 +115,15 @@ exports.editPost = (req, res, next) => {
         return false;
     }
   };
+  const isCoverPhotoValid = (coverPhotoUrl) =>
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
+      coverPhotoUrl.trim(),
+    );
 
   if (!isTitleValid(title)) {
     return res.status(422).json({ error: "Title can't be empty" });
+  } else if (!isCoverPhotoValid(coverPhotoUrl)) {
+    return res.status(422).json({ error: "Enter a valid URL" });
   } else if (!isContentValid(content)) {
     return res
       .status(422)
@@ -128,6 +141,7 @@ exports.editPost = (req, res, next) => {
       post.title = title.trim();
       post.content = content.toString();
       post.category = category.trim();
+      post.coverPhotoUrl = coverPhotoUrl.trim();
       post.lastUpdated = new Date().toISOString();
       return post.save();
     })

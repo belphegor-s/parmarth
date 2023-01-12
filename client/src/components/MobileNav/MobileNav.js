@@ -147,9 +147,11 @@ const MobileNav = () => {
             <ul>
               <li>
                 <NavLink
-                  to="#"
+                  to="articles-and-blogs"
                   className={
-                    pathname === "#" ? "mobile-nav__active" : "mobile-nav__link"
+                    pathname === "articles-and-blogs"
+                      ? "mobile-nav__active"
+                      : "mobile-nav__link"
                   }
                   style={{ fontSize: "18px" }}
                 >

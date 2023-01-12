@@ -13,6 +13,11 @@
   box-shadow: 0 0 10px #535353;
 }
 
+.post-card > img {
+  width: 100%;
+  height: 200px;
+}
+
 .details {
   padding: 0.5rem;
 }

@@ -9,6 +9,7 @@ const PostCard = (props) => {
       className={styles["post-card"]}
       onClick={() => navigate(`/${props.data.category}/${props.data._id}`)}
     >
+      <img src={props.data.coverPhotoUrl} alt="" />
       <div className={styles.details}>
         <h3>{props.data.title}</h3>
         <p>
