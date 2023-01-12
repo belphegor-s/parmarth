@@ -3,7 +3,7 @@ import styles from "./PostForm.module.css";
 import toast from "react-hot-toast";
 import JoditEditor from "jodit-react";
 import AuthContext from "../../store/auth-context";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import backendUrl from "../../backendUrl";
 
 const PostForm = (props) => {
@@ -156,6 +156,28 @@ const PostForm = (props) => {
         <h1>
           {props.function.charAt(0).toUpperCase() + props.function.slice(1)}{" "}
           Post
+          <br />
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "900",
+              color: "red",
+            }}
+          >
+            NOTE: All Image URL(s) should be of Google Drive (Must Convert
+            them&nbsp;
+            <Link
+              to="/convert-url"
+              style={{
+                textDecoration: "underline",
+                color: "#277bc0",
+                fontSize: "16px",
+              }}
+            >
+              here
+            </Link>{" "}
+            before use)
+          </span>
         </h1>
         <label for="title">Post Title</label>
         <input
@@ -166,7 +188,11 @@ const PostForm = (props) => {
           placeholder="Enter your post title"
           onChange={(e) => setTitle(e.target.value)}
         />
-        <label for="cover-photo-url">Cover Photo URL</label>
+        <label for="cover-photo-url">
+          Cover Photo URL
+          <br />
+        </label>
+
         <input
           required
           value={coverPhotoUrl}

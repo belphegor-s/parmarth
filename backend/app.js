@@ -14,6 +14,7 @@ const postRoutes = require("./routes/post");
 const approveRequestRoute = require("./routes/approveRequest");
 const status2FARoute = require("./routes/status2FA");
 const verify2FARoute = require("./routes/verify2FACode");
+const imgUrlRoute = require("./routes/imgUrl");
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(postRoutes);
 app.use(approveRequestRoute);
 app.use(status2FARoute);
 app.use(verify2FARoute);
+app.use(imgUrlRoute);
 
 mongoose
   .connect(process.env.MONGOURI)

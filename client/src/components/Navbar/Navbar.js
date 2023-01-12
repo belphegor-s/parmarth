@@ -375,6 +375,19 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   )}
+                  <li>
+                    <NavLink
+                      to="/convert-url"
+                      className={
+                        pathname === "/convert-url"
+                          ? styles.active
+                          : styles.link
+                      }
+                      style={{ fontSize: "18px" }}
+                    >
+                      Convert URL
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
             )}
@@ -387,44 +400,6 @@ const Navbar = () => {
           onClick={() => window.open("https://ietlucknow.ac.in/", "_blank")}
         ></div>
       )}
-
-      {/* <div style={{ display: "flex" }}>
-        {isLoggedIn && pathname !== "/create-post" && (
-          <button
-            className={styles["create-post"]}
-            onClick={() => navigate("/create-post")}
-            style={{
-              display: width >= 1300 ? "block" : "none",
-            }}
-          >
-            CREATE POST
-          </button>
-        )}
-        {!isLoggedIn ? (
-          <button
-            className={styles.login}
-            onClick={() => navigate("/login")}
-            style={{
-              display: width >= 1300 ? "block" : "none",
-            }}
-          >
-            LOGIN
-          </button>
-        ) : (
-          <button
-            className={styles.login}
-            onClick={() => {
-              authCtx.logout();
-              navigate("/");
-            }}
-            style={{
-              display: width >= 1300 ? "block" : "none",
-            }}
-          >
-            LOGOUT
-          </button>
-        )}
-      </div> */}
 
       {/* Mobile Hamburger Menu */}
       {width < 1300 && (

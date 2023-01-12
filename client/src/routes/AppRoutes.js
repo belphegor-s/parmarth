@@ -26,6 +26,7 @@ import backendUrl from "../backendUrl";
 import toast from "react-hot-toast";
 import FestivalCelebration from "../pages/FestivalCelebration/FestivalCelebration";
 import ArticlesAndBlogs from "../pages/ArticlesAndBlogs/ArticlesAndBlogs";
+import ConvertUrl from "../pages/ConvertUrl/ConvertUrl";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
@@ -40,7 +41,9 @@ const AppRoutes = () => {
           .then((resData) => {
             authCtx.fillUserType(resData.userType);
           })
-          .catch((err) => toast.error(err.message));
+          .catch((err) => {
+            toast.error(err.message);
+          });
       })();
     }
   });
@@ -60,6 +63,9 @@ const AppRoutes = () => {
       <Route path="/educational-visits" element={<EducationalVisits />} />
       <Route path="/festival-celebration" element={<FestivalCelebration />} />
       <Route path="/articles-and-blogs" element={<ArticlesAndBlogs />} />
+      {authCtx.isLoggedIn && (
+        <Route path="/convert-url" element={<ConvertUrl />} />
+      )}
       <Route
         path="/request-for-certificate"
         element={<RequestForCertificate />}

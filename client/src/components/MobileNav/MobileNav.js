@@ -147,9 +147,9 @@ const MobileNav = () => {
             <ul>
               <li>
                 <NavLink
-                  to="articles-and-blogs"
+                  to="/articles-and-blogs"
                   className={
-                    pathname === "articles-and-blogs"
+                    pathname === "/articles-and-blogs"
                       ? "mobile-nav__active"
                       : "mobile-nav__link"
                   }
@@ -324,6 +324,19 @@ const MobileNav = () => {
                     </NavLink>
                   </li>
                 )}
+                <li>
+                  <NavLink
+                    to="/convert-url"
+                    className={
+                      pathname === "/convert-url"
+                        ? "mobile-nav__active"
+                        : "mobile-nav__link"
+                    }
+                    style={{ fontSize: "18px" }}
+                  >
+                    Convert URL
+                  </NavLink>
+                </li>
               </ul>
             </div>
           )}
