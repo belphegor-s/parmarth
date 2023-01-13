@@ -4,6 +4,7 @@ import Footer from "../../components/Footer/Footer";
 import styles from "./ArticlesAndBlogs.module.css";
 import PostCard from "../../components/PostCard/PostCard";
 import backendUrl from "../../backendUrl";
+import Masonry from "react-masonry-css";
 
 const ArticlesAndBlogs = () => {
   const [data, setData] = useState([]);
@@ -33,13 +34,21 @@ const ArticlesAndBlogs = () => {
       <div className={styles.body}>
         <h1>Articles and Blogs</h1>
         <hr className={styles.hr} />
-        <div className={styles["post-wrap"]}>
+        <Masonry
+          breakpointCols={{
+            default: 3,
+            1100: 2,
+            768: 1,
+          }}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
+        >
           {isLoading ? (
             <div className={styles.loader}></div>
           ) : (
             data.map((item) => <PostCard key={item._id} data={item} />)
           )}
-        </div>
+        </Masonry>
       </div>
       <Footer />
     </>

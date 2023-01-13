@@ -4,6 +4,7 @@ import Footer from "../../components/Footer/Footer";
 import styles from "./FestivalCelebration.module.css";
 import PostCard from "../../components/PostCard/PostCard";
 import backendUrl from "../../backendUrl";
+import Masonry from "react-masonry-css";
 
 const FestivalCelebration = () => {
   const [data, setData] = useState([]);
@@ -27,11 +28,21 @@ const FestivalCelebration = () => {
       <div className={styles.body}>
         <h1>Festival Celebration</h1>
         <hr className={styles.hr} />
-        {isLoading ? (
-          <div className={styles.loader}></div>
-        ) : (
-          data.map((item) => <PostCard key={item._id} data={item} />)
-        )}
+        <Masonry
+          breakpointCols={{
+            default: 3,
+            1100: 2,
+            768: 1,
+          }}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
+        >
+          {isLoading ? (
+            <div className={styles.loader}></div>
+          ) : (
+            data.map((item) => <PostCard key={item._id} data={item} />)
+          )}
+        </Masonry>
       </div>
       <Footer />
     </>

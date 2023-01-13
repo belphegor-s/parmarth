@@ -25,8 +25,8 @@ const Events = () => {
             1100: 2,
             768: 1,
           }}
-          className={styles["my-masonry-grid"]}
-          columnClassName={styles["my-masonry-grid_column"]}
+          className="masonry-grid"
+          columnClassName="masonry-grid_column"
         >
           <EventsCard
             src="/img/beggers.jpg"

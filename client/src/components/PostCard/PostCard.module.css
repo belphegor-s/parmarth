@@ -1,8 +1,8 @@
 .post-card {
-  width: 300px;
+  width: 330px;
   border: 2px solid #277bc0;
-  border-radius: 5px;
-  margin: 1.5rem 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -22,7 +22,7 @@
   padding: 0.5rem;
 }
 
-.details > h3 {
+.details > h2 {
   font-family: "Merriweather", sans-serif;
   margin-bottom: 0;
 }

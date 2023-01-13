@@ -13,7 +13,7 @@ const PostCard = (props) => {
       >
         <img src={props.data.coverPhotoUrl} alt="" />
         <div className={styles.details}>
-          <h3>{props.data.title}</h3>
+          <h2>{props.data.title}</h2>
           <p className={styles["last-updated"]}>
             {new Date(props.data.lastUpdated).toLocaleDateString([], {
               day: "2-digit",

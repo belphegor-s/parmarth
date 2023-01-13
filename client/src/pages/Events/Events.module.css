@@ -19,17 +19,6 @@
   margin-bottom: 4rem;
 }
 
-.my-masonry-grid {
-  display: flex;
-  margin-left: -30px;
-  width: auto;
-}
-
-.my-masonry-grid_column {
-  padding-left: 30px;
-  background-clip: padding-box;
-}
-
 @media screen and (max-width: 768px) {
   .page-desc {
     width: 90%;
