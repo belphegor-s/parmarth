@@ -76,6 +76,12 @@ exports.approveRequest = (req, res, next) => {
         doc.pipe(fs.createWriteStream(`certificate-${data.name}.pdf`));
         doc.end();
 
+        const certificatePath = path.join(
+          __dirname,
+          "../",
+          `certificate-${name}.pdf`,
+        );
+
         const details = {
           from: process.env.EMAIL,
           to: data.email,
@@ -89,73 +95,73 @@ exports.approveRequest = (req, res, next) => {
           ],
         };
 
-        transporter.sendMail(details, (err) => {
-          // if (err) {
-          //   return res.status(422).json({ error: err.message });
-          // } else {
-          const certificatePath = path.join(
-            __dirname,
-            "../",
-            `certificate-${name}.pdf`,
-          );
-
-          var certificateIssued = false;
-
-          Certificate.findOne({
-            name: data.name,
-            email: data.email,
-            branch: data.branch,
-            rollNumber: data.rollNumber,
-            purpose: data.purpose,
-            ...(data.purpose === "general" && { postHolded: data.postHolded }),
-            ...(data.purpose === "event" && { event: data.event }),
-          })
-            .then((res) => {
-              if (!res) {
-                const certificateData = new Certificate({
-                  name: data.name.trim().toUpperCase(),
-                  email: data.email.trim(),
-                  branch: data.branch.trim(),
-                  rollNumber: +data.rollNumber,
-                  purpose: data.purpose.trim(),
-                  certificateNumber: certificateNumber,
-                  ...(data.purpose === "general" && {
-                    postHolded: data.postHolded,
-                  }),
-                  ...(data.purpose === "event" && { event: data.event }),
-                });
-
-                certificateData
-                  .save()
-                  .then(() => {
-                    console.log("Added Data");
-                  })
-                  .catch((err) => {
-                    console.log(err);
+        Certificate.findOne({
+          name: data.name,
+          email: data.email,
+          branch: data.branch,
+          rollNumber: data.rollNumber,
+          purpose: data.purpose,
+          ...(data.purpose === "general" && {
+            postHolded: data.postHolded,
+          }),
+          ...(data.purpose === "event" && { event: data.event }),
+        })
+          .then((result) => {
+            if (!result) {
+              transporter.sendMail(details, (err) => {
+                if (err) {
+                  return res.status(422).json({ error: err.message });
+                } else {
+                  const certificateData = new Certificate({
+                    name: data.name.trim().toUpperCase(),
+                    email: data.email.trim(),
+                    branch: data.branch.trim(),
+                    rollNumber: +data.rollNumber,
+                    purpose: data.purpose.trim(),
+                    certificateNumber: certificateNumber,
+                    ...(data.purpose === "general" && {
+                      postHolded: data.postHolded,
+                    }),
+                    ...(data.purpose === "event" && { event: data.event }),
                   });
-              } else if (res.rollNumber === data.rollNumber) {
-                certificateIssued = true;
-              }
-            })
-            .catch((err) => console.log(err));
 
-          fs.unlinkSync(certificatePath, (err) => {
-            if (err) {
-              return res.end(err);
-            } else {
-              console.log("certificate deleted");
+                  certificateData
+                    .save()
+                    .then(() => {
+                      console.log("Added Data");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+
+                  fs.unlinkSync(certificatePath, (err) => {
+                    if (err) {
+                      return res.end(err);
+                    } else {
+                      console.log("certificate deleted");
+                    }
+                  });
+
+                  return res
+                    .status(200)
+                    .json({ message: "Successfully sent mail" });
+                }
+              });
+            } else if (result.rollNumber === data.rollNumber) {
+              fs.unlinkSync(certificatePath, (err) => {
+                if (err) {
+                  return res.end(err);
+                } else {
+                  console.log("certificate deleted");
+                }
+              });
+
+              return res.status(422).json({
+                error: "Certificate already issued with same data",
+              });
             }
-          });
-
-          if (certificateIssued == false) {
-            return res.status(200).json({ message: "Successfully sent mail" });
-          } else {
-            return res
-              .status(200)
-              .json({ message: "Certificate already issued with same data" });
-          }
-          // }
-        });
+          })
+          .catch((err) => console.log(err.message));
       }
     })
     .catch((err) => {

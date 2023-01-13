@@ -1,5 +1,6 @@
 const Request = require("../models/request");
 const Volunteer = require("../models/volunteers");
+const Certificate = require("../models/certificate");
 
 exports.getRequestData = (req, res, next) => {
   Request.find()
@@ -94,28 +95,51 @@ exports.addRequestData = (req, res, next) => {
       Request.findOne({ rollNumber: rollNumber })
         .then((data) => {
           if (!data) {
-            const requestData = new Request({
-              name: name.trim().toUpperCase(),
-              email: email.trim().toLowerCase(),
-              branch: branch.trim(),
+            Certificate.findOne({
+              name: name.toUpperCase(),
+              email: email.toLowerCase(),
+              branch: branch,
               rollNumber: +rollNumber,
-              purpose: purpose.trim(),
-              ...(purpose === "general" && { postHolded: postHolded }),
+              purpose: purpose,
+              ...(purpose === "general" && {
+                postHolded: postHolded,
+              }),
               ...(purpose === "event" && { event: event }),
-              dataExist: dataExist,
-            });
-            if (requestData.dataExist === null) {
-              return res
-                .status(422)
-                .json({ error: "Couldn't check if data exists" });
-            }
-            requestData
-              .save()
-              .then(() => {
-                console.log("Added Data");
-                return res
-                  .status(201)
-                  .json({ message: "Successfully added your request" });
+            })
+              .then((result) => {
+                if (!result) {
+                  const requestData = new Request({
+                    name: name.trim().toUpperCase(),
+                    email: email.trim().toLowerCase(),
+                    branch: branch.trim(),
+                    rollNumber: +rollNumber,
+                    purpose: purpose.trim(),
+                    ...(purpose === "general" && { postHolded: postHolded }),
+                    ...(purpose === "event" && { event: event }),
+                    dataExist: dataExist,
+                  });
+
+                  if (requestData.dataExist === null) {
+                    return res
+                      .status(422)
+                      .json({ error: "Couldn't check if data exists" });
+                  }
+                  requestData
+                    .save()
+                    .then(() => {
+                      console.log("Added Data");
+                      return res
+                        .status(201)
+                        .json({ message: "Successfully added your request" });
+                    })
+                    .catch((err) =>
+                      res.status(500).json({ error: err.message }),
+                    );
+                } else if (result.rollNumber === rollNumber) {
+                  return res.status(422).json({
+                    error: "Certificate already issued with same data",
+                  });
+                }
               })
               .catch((err) => res.status(500).json({ error: err.message }));
           } else if (data.rollNumber === rollNumber) {
