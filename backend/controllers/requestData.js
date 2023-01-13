@@ -96,7 +96,7 @@ exports.addRequestData = (req, res, next) => {
           if (!data) {
             const requestData = new Request({
               name: name.trim().toUpperCase(),
-              email: email.trim(),
+              email: email.trim().toLowerCase(),
               branch: branch.trim(),
               rollNumber: +rollNumber,
               purpose: purpose.trim(),

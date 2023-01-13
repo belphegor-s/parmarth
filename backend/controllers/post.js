@@ -2,6 +2,7 @@ const Post = require("../models/post");
 
 exports.getPosts = (req, res, next) => {
   Post.find()
+    .sort({ lastUpdated: 1 })
     .then((posts) => {
       res.status(200).json(posts);
     })
@@ -22,6 +23,7 @@ exports.getPostByCategory = (req, res, next) => {
   const { category } = req.params;
 
   Post.find({ category: category }, { createdAt: 0 })
+    .sort({ lastUpdated: 1 })
     .then((post) => {
       res.status(200).json(post);
     })

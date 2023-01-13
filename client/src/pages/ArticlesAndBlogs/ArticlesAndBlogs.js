@@ -18,7 +18,11 @@ const ArticlesAndBlogs = () => {
       const blogRes = await fetch(`${backendUrl}/getPostByCategory/blog`);
       const blogData = await blogRes.json();
 
-      setData([...articleData, ...blogData]);
+      setData(
+        [...articleData, ...blogData].sort(
+          (a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated),
+        ),
+      );
       setIsLoading(false);
     })();
   }, []);

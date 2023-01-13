@@ -27,7 +27,15 @@
   margin-bottom: 0;
 }
 
-.details > p {
+.min-content {
+  background-color: aquamarine;
+  width: max-content;
+  padding: 0.2rem 0.8rem;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.last-updated {
   background-color: aquamarine;
   width: max-content;
   padding: 0.2rem 0.8rem;

@@ -145,7 +145,7 @@ const Footer = () => {
       </div>
 
       <div className={styles.copyright}>
-        Parmarth © 2022 All Rights Reserved
+        Parmarth © 2023 All Rights Reserved
       </div>
     </div>
   );

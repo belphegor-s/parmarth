@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./ConvertUrl.module.css";
@@ -38,10 +38,6 @@ const ConvertUrl = () => {
 
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    console.log(convertedUrl);
-  }, [convertedUrl]);
 
   return (
     <>
