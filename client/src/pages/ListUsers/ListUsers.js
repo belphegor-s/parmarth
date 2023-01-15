@@ -54,7 +54,7 @@ const ListUsers = () => {
                 <th>User Email</th>
                 <th>User Type</th>
                 <th>2FA Status</th>
-                <th>Action</th>
+                <th>2FA Action</th>
               </tr>
               {isLoading ? (
                 <td colSpan={6}>
