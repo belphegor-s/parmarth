@@ -27,20 +27,19 @@
   margin-bottom: 0;
 }
 
-.min-content {
-  background-color: aquamarine;
+.last-updated,
+.category {
+  background-color: #579bb1;
   width: max-content;
   padding: 0.2rem 0.8rem;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
 }
 
-.last-updated {
-  background-color: aquamarine;
-  width: max-content;
-  padding: 0.2rem 0.8rem;
-  border-radius: 5px;
-  font-size: 14px;
+.category {
+  background-color: #5bc0f8;
 }
 
 @media screen and (max-width: 576px) {

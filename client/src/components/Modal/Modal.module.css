@@ -26,11 +26,6 @@
   align-items: center;
 }
 
-.delete-btn {
-  font-size: 60px;
-  color: #db1b1b;
-}
-
 .confirm-btn {
   padding: 0.5rem;
   font-size: 18px;

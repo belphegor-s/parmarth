@@ -1,8 +1,10 @@
 const Post = require("../models/post");
 
 exports.getPosts = (req, res, next) => {
-  Post.find()
-    .sort({ lastUpdated: 1 })
+  Post.find(
+    { title: { $exists: true } },
+    { title: 1, category: 1, createdAt: 1, lastUpdated: 1 },
+  )
     .then((posts) => {
       res.status(200).json(posts);
     })
@@ -22,7 +24,10 @@ exports.getPostById = (req, res, next) => {
 exports.getPostByCategory = (req, res, next) => {
   const { category } = req.params;
 
-  Post.find({ category: category }, { createdAt: 0 })
+  Post.find(
+    { category: category },
+    { title: 1, description: 1, lastUpdated: 1, coverPhotoUrl: 1, category: 1 },
+  )
     .sort({ lastUpdated: 1 })
     .then((post) => {
       res.status(200).json(post);
@@ -31,7 +36,7 @@ exports.getPostByCategory = (req, res, next) => {
 };
 
 exports.addPost = (req, res, next) => {
-  const { title, content, category, coverPhotoUrl } = req.body;
+  const { title, description, content, category, coverPhotoUrl } = req.body;
 
   const isTitleValid = (title) => title.trim().length > 0;
   const isContentValid = (content) => content.trim().length > 0;
@@ -50,15 +55,12 @@ exports.addPost = (req, res, next) => {
         return false;
     }
   };
-  const isCoverPhotoValid = (coverPhotoUrl) =>
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
-      coverPhotoUrl.trim(),
-    );
+  const isCoverPhotoValid = (coverPhotoUrl) => coverPhotoUrl.length > 0;
 
   if (!isTitleValid(title)) {
     return res.status(422).json({ error: "Title can't be empty" });
   } else if (!isCoverPhotoValid(coverPhotoUrl)) {
-    return res.status(422).json({ error: "Enter a valid URL" });
+    return res.status(422).json({ error: "Select a file" });
   } else if (!isContentValid(content)) {
     return res
       .status(422)
@@ -69,6 +71,7 @@ exports.addPost = (req, res, next) => {
 
   const post = new Post({
     title: title.trim(),
+    description: description.trim() || "",
     coverPhotoUrl: coverPhotoUrl,
     content: content.toString(),
     category: category,
@@ -98,7 +101,7 @@ exports.addPost = (req, res, next) => {
 exports.editPost = (req, res, next) => {
   const id = req.params.id;
 
-  const { title, content, category, coverPhotoUrl } = req.body;
+  const { title, description, content, category, coverPhotoUrl } = req.body;
 
   const isTitleValid = (title) => title.trim().length > 0;
   const isContentValid = (content) => content.trim().length > 0;
@@ -117,10 +120,7 @@ exports.editPost = (req, res, next) => {
         return false;
     }
   };
-  const isCoverPhotoValid = (coverPhotoUrl) =>
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
-      coverPhotoUrl.trim(),
-    );
+  const isCoverPhotoValid = (coverPhotoUrl) => coverPhotoUrl.length > 0;
 
   if (!isTitleValid(title)) {
     return res.status(422).json({ error: "Title can't be empty" });
@@ -141,6 +141,7 @@ exports.editPost = (req, res, next) => {
         return "post not found";
       }
       post.title = title.trim();
+      post.description = description.trim() || "";
       post.content = content.toString();
       post.category = category.trim();
       post.coverPhotoUrl = coverPhotoUrl.trim();

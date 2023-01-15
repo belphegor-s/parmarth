@@ -60,15 +60,15 @@ const Post = () => {
           <div className={styles.loader}></div>
         ) : (
           <div className={styles.post}>
-            <h1 className={styles.title}>{data.title}</h1>
+            <h1 className={styles.title}>{data?.title}</h1>
             <div className={styles["post-info"]}>
               <p className={styles.category}>
-                <strong>Category:</strong> {categoryMap[data.category]}
+                <strong>Category:</strong> {categoryMap[data?.category]}
                 &nbsp;&nbsp;|&nbsp;&nbsp;
               </p>
               <p className={styles.category}>
                 <strong>Last Updated:</strong>&nbsp;
-                {new Date(data.lastUpdated).toLocaleDateString([], {
+                {new Date(data?.lastUpdated).toLocaleDateString([], {
                   day: "2-digit",
                   month: "short",
                   year: "numeric",
@@ -84,9 +84,9 @@ const Post = () => {
                 Edit Post
               </button>
             )}
-            <img src={data.coverPhotoUrl} alt="" />
+            <img src={data?.coverPhotoUrl} alt="" />
             <div
-              dangerouslySetInnerHTML={{ __html: data.content }}
+              dangerouslySetInnerHTML={{ __html: data?.content }}
               style={width < 768 ? null : { padding: "0 4rem" }}
             ></div>
           </div>

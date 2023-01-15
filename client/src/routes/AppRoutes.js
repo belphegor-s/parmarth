@@ -63,9 +63,9 @@ const AppRoutes = () => {
       <Route path="/educational-visits" element={<EducationalVisits />} />
       <Route path="/festival-celebration" element={<FestivalCelebration />} />
       <Route path="/articles-and-blogs" element={<ArticlesAndBlogs />} />
-      {authCtx.isLoggedIn && (
+      {/* {authCtx.isLoggedIn && (
         <Route path="/convert-url" element={<ConvertUrl />} />
-      )}
+      )} */}
       <Route
         path="/request-for-certificate"
         element={<RequestForCertificate />}

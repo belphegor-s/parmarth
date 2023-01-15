@@ -3,12 +3,14 @@ import styles from "./PostForm.module.css";
 import toast from "react-hot-toast";
 import JoditEditor from "jodit-react";
 import AuthContext from "../../store/auth-context";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import backendUrl from "../../backendUrl";
+import Resizer from "react-image-file-resizer";
 
 const PostForm = (props) => {
   const [title, setTitle] = useState("");
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const [coverPhoto, setCoverPhoto] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,8 +25,9 @@ const PostForm = (props) => {
     hidePoweredByJodit: true,
     minHeight: 500,
     maxHeight: 500,
+    uploader: { insertImageAsBase64URI: true },
     buttons:
-      "bold,italic,underline,strikethrough,eraser,ul,ol,font,fontsize,paragraph,classSpan,lineHeight,superscript,subscript,file,image,video,spellcheck,cut,copy,paste,selectall,copyformat,hr,table,link,symbols,indent,outdent,left,brush,undo,redo,find,source,fullsize,preview,print",
+      "bold,italic,underline,strikethrough,ul,ol,align,fontsize,brush,font,paragraph,lineHeight,superscript,subscript,image,video,table,link,symbols,indent,outdent,preview",
   };
 
   const isTitleValid = (title) => title.trim().length > 0;
@@ -44,10 +47,23 @@ const PostForm = (props) => {
         return false;
     }
   };
-  const isCoverPhotoValid = (coverPhotoUrl) =>
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(
-      coverPhotoUrl.trim(),
-    );
+  const isCoverPhotoValid = (coverPhoto) => coverPhoto.length > 0;
+
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        400,
+        300,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64",
+      );
+    });
 
   useEffect(() => {
     const getPostById = async () => {
@@ -62,20 +78,16 @@ const PostForm = (props) => {
           if (res === []) {
             toast.error("Failed to load Post Data");
           }
-          console.log(res);
           setTitle(res.title);
+          setDescription(res.description);
           setContent(res.content);
           setCategory(res.category);
-          setCoverPhotoUrl(res.coverPhotoUrl);
+          setCoverPhoto(res.coverPhotoUrl);
         })
         .catch((err) => toast.error(err.message));
     };
     if (props.function === "edit") getPostById();
   }, []);
-
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
 
   const onFormSubmitHandler = async (e) => {
     e.preventDefault();
@@ -84,8 +96,8 @@ const PostForm = (props) => {
       toast.error("Title can't be empty");
       setIsLoading(false);
       return;
-    } else if (!isCoverPhotoValid(coverPhotoUrl)) {
-      toast.error("Enter a valid URL");
+    } else if (!isCoverPhotoValid(coverPhoto)) {
+      toast.error("Select a file");
       setIsLoading(false);
       return;
     } else if (!isContentValid(content)) {
@@ -100,7 +112,8 @@ const PostForm = (props) => {
 
     const data = {
       title: title,
-      coverPhotoUrl: coverPhotoUrl,
+      description: description || "",
+      coverPhotoUrl: coverPhoto,
       content: content,
       category: category,
     };
@@ -159,49 +172,56 @@ const PostForm = (props) => {
           <br />
           <span
             style={{
-              fontSize: "14px",
-              fontWeight: "900",
+              fontSize: "15px",
+              fontWeight: "700",
               color: "red",
             }}
           >
-            NOTE: All Image URL(s) should be of Google Drive (Must Convert
-            them&nbsp;
-            <Link
-              to="/convert-url"
-              style={{
-                textDecoration: "underline",
-                color: "#277bc0",
-                fontSize: "16px",
-              }}
-            >
-              here
-            </Link>{" "}
-            before use)
+            NOTE: Make sure to not upload large size Images
           </span>
         </h1>
-        <label for="title">Post Title</label>
+        <label for="title">
+          Post Title <span style={{ color: "red" }}>*</span>
+        </label>
         <input
           required
           value={title}
-          id="name"
+          id="title"
           type="text"
           placeholder="Enter your post title"
           onChange={(e) => setTitle(e.target.value)}
         />
-        <label for="cover-photo-url">
-          Cover Photo URL
-          <br />
-        </label>
-
-        <input
-          required
-          value={coverPhotoUrl}
-          id="cover-photo-url"
-          type="text"
-          placeholder="Enter cover photo URL"
-          onChange={(e) => setCoverPhotoUrl(e.target.value)}
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          value={description}
+          placeholder="Enter your post description"
+          onChange={(e) => setDescription(e.target.value)}
+          rows="3"
         />
-        <label for="content">Post Content</label>
+        <label for="cover-photo-url">
+          Cover Photo URL <span style={{ color: "red" }}>*</span>
+        </label>
+        <input
+          type="file"
+          id="cover-photo-url"
+          placeholder="Enter cover photo URL"
+          onChange={async (e) => {
+            try {
+              const file = e.target.files[0];
+              const image = await resizeFile(file);
+              setCoverPhoto(image);
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        />
+        {coverPhoto && (
+          <img src={coverPhoto} alt="cover" className={styles["cover-photo"]} />
+        )}
+        <label for="content">
+          Post Content <span style={{ color: "red" }}>*</span>
+        </label>
         <div>
           <JoditEditor
             id="content"
@@ -209,12 +229,15 @@ const PostForm = (props) => {
             value={content}
             config={config}
             onBlur={(newContent) => setContent(newContent)}
+            onChange={(newContent) => {}}
             className={styles.content}
             tabIndex={1}
           />
         </div>
         <span>
-          <label for="category">Category</label>
+          <label for="category">
+            Category <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             required
             value={category === "" ? "choose" : category}

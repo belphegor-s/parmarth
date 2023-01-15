@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
-import { AiFillDelete } from "react-icons/ai";
 
 const Modal = ({ open, children, onClose, onConfirm }) => {
   if (!open) {
@@ -12,9 +11,6 @@ const Modal = ({ open, children, onClose, onConfirm }) => {
     <>
       <div className={styles.overlay}></div>
       <div className={styles.modal}>
-        <span className={styles["delete-btn"]}>
-          <AiFillDelete />
-        </span>
         {children}
         <div className={styles["options"]}>
           <button className={styles["confirm-btn"]} onClick={onConfirm}>

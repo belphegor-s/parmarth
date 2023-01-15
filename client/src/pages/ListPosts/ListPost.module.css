@@ -83,6 +83,11 @@ th {
   margin: 2rem auto;
 }
 
+.delete-btn {
+  font-size: 60px;
+  color: #db1b1b;
+}
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);

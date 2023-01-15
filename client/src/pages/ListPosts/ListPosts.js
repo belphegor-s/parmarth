@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import backendUrl from "../../backendUrl";
 import Modal from "../../components/Modal/Modal";
+import { AiFillDelete } from "react-icons/ai";
 
 const ListPost = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [postToBeDeleted, setPostToBeDeleted] = useState("");
   const [modalState, setModalState] = useState(false);
   const authCtx = useContext(AuthContext);
@@ -139,6 +141,7 @@ const ListPost = () => {
           setPostToBeDeleted("");
         }}
         onConfirm={async () => {
+          setIsDeleting(true);
           await fetch(`${backendUrl}/deletePost/` + postToBeDeleted, {
             headers: {
               Authorization: "Bearer " + authCtx.token,
@@ -150,32 +153,47 @@ const ListPost = () => {
             .then((resData) => {
               if (resData.error) {
                 toast.error(resData.error);
+                setIsDeleting(false);
+                setModalState(false);
               } else if (resData.message) {
                 toast.success(resData.message);
+                setIsDeleting(false);
+                setModalState(false);
                 getPosts();
               }
-              setModalState(false);
             })
             .catch((err) => console.log(err));
         }}
       >
-        <div
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "600",
-            color: "#db1b1b",
-          }}
-        >
-          Confirm Delete
-        </div>
-        <p
-          style={{
-            color: "#db1b1b",
-          }}
-        >
-          This Operation is irreversible
-        </p>
-        <br />
+        {isDeleting ? (
+          <div
+            className={styles.loader}
+            style={{ marginBottom: "2.5rem" }}
+          ></div>
+        ) : (
+          <>
+            <span className={styles["delete-btn"]}>
+              <AiFillDelete />
+            </span>
+            <div
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                color: "#db1b1b",
+              }}
+            >
+              Confirm Delete
+            </div>
+            <p
+              style={{
+                color: "#db1b1b",
+              }}
+            >
+              This Operation is irreversible
+            </p>
+            <br />
+          </>
+        )}
       </Modal>
       <Footer />
     </>
