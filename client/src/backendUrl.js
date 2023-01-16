@@ -1,4 +1,4 @@
 // Don't include '/' at the end of URL path
-const backendUrl = "http://localhost:8080/api";
+const backendUrl = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default backendUrl;
