@@ -4,6 +4,8 @@ import backendURl from "../../backendUrl";
 import toast from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 const VerifyCode = () => {
   const [verificationCode, setVerificationCode] = useState("");
@@ -56,25 +58,29 @@ const VerifyCode = () => {
   };
 
   return (
-    <div className={styles.main}>
-      <div className={styles["card"]}>
-        <div className={styles.heading}>Verify 2FA Code</div>
-        <form onSubmit={onSubmitHandler} className={styles["form"]}>
-          <label for="verification-code" className={styles.label}>
-            Verification Code
-          </label>
-          <input
-            id="verification-code"
-            type="text"
-            onChange={(e) => setVerificationCode(e.target.value)}
-            required
-          />
-          <button type="submit">
-            {isLoading ? <div className={styles.loader}></div> : "Verify"}
-          </button>
-        </form>
+    <>
+      <Navbar />
+      <div className={styles.main}>
+        <div className={styles["card"]}>
+          <div className={styles.heading}>Verify 2FA Code</div>
+          <form onSubmit={onSubmitHandler} className={styles["form"]}>
+            <label for="verification-code" className={styles.label}>
+              Verification Code
+            </label>
+            <input
+              id="verification-code"
+              type="text"
+              onChange={(e) => setVerificationCode(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? <div className={styles.loader}></div> : "Verify"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

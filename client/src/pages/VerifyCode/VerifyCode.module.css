@@ -2,13 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .card {
   border: 2px solid #227bc0;
   border-radius: 10px;
   padding: 2rem;
+  margin: 2rem 0;
 }
 
 .heading {

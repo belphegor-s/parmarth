@@ -127,9 +127,20 @@
 .loader {
   border: 5px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 5px solid gray;
+  border-top: 5px solid grey;
   width: 15px;
   height: 15px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+.loader-form {
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #277bc0;
+  width: 40px;
+  height: 40px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
   margin: auto;

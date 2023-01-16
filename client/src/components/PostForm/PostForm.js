@@ -14,6 +14,7 @@ const PostForm = (props) => {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isPostLoading, setIsPostLoading] = useState(false);
   const authCtx = useContext(AuthContext);
   const { id } = useParams();
 
@@ -67,6 +68,7 @@ const PostForm = (props) => {
 
   useEffect(() => {
     const getPostById = async () => {
+      setIsPostLoading(true);
       await fetch(`${backendUrl}/getPost/` + id)
         .then((res) => {
           if (res.status !== 200) {
@@ -85,6 +87,7 @@ const PostForm = (props) => {
           setCoverPhoto(res.coverPhotoUrl);
         })
         .catch((err) => toast.error(err.message));
+      setIsPostLoading(false);
     };
     if (props.function === "edit") getPostById();
   }, []);
@@ -166,108 +169,116 @@ const PostForm = (props) => {
 
   return (
     <>
-      <form className={styles.form} onSubmit={onFormSubmitHandler}>
-        <h1>
-          {props.function.charAt(0).toUpperCase() + props.function.slice(1)}{" "}
-          Post
-          <br />
-          <span
-            style={{
-              fontSize: "15px",
-              fontWeight: "700",
-              color: "red",
-            }}
-          >
-            NOTE: Make sure not to upload large size Images
-          </span>
-        </h1>
-        <label for="title">
-          Post Title <span style={{ color: "red" }}>*</span>
-        </label>
-        <input
-          required
-          value={title}
-          id="title"
-          type="text"
-          placeholder="Enter your post title"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <label for="description">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          placeholder="Enter your post description"
-          onChange={(e) => setDescription(e.target.value)}
-          rows="3"
-        />
-        <label for="cover-photo-url">
-          Cover Photo URL <span style={{ color: "red" }}>*</span>
-        </label>
-        <input
-          type="file"
-          id="cover-photo-url"
-          placeholder="Enter cover photo URL"
-          onChange={async (e) => {
-            try {
-              const file = e.target.files[0];
-              const image = await resizeFile(file);
-              setCoverPhoto(image);
-            } catch (err) {
-              console.log(err);
-            }
-          }}
-        />
-        {coverPhoto && (
-          <img src={coverPhoto} alt="cover" className={styles["cover-photo"]} />
-        )}
-        <label for="content">
-          Post Content <span style={{ color: "red" }}>*</span>
-        </label>
-        <div>
-          <JoditEditor
-            id="content"
-            ref={editor}
-            value={content}
-            config={config}
-            onBlur={(newContent) => setContent(newContent)}
-            onChange={(newContent) => {}}
-            className={styles.content}
-            tabIndex={1}
-          />
-        </div>
-        <span>
-          <label for="category">
-            Category <span style={{ color: "red" }}>*</span>
+      {isPostLoading ? (
+        <div className={styles["loader-form"]}></div>
+      ) : (
+        <form className={styles.form} onSubmit={onFormSubmitHandler}>
+          <h1>
+            {props.function.charAt(0).toUpperCase() + props.function.slice(1)}{" "}
+            Post
+            <br />
+            <span
+              style={{
+                fontSize: "15px",
+                fontWeight: "700",
+                color: "red",
+              }}
+            >
+              NOTE: Make sure not to upload large size Images
+            </span>
+          </h1>
+          <label for="title">
+            Post Title <span style={{ color: "red" }}>*</span>
           </label>
-          <select
+          <input
             required
-            value={category === "" ? "choose" : category}
-            id="category"
-            className={styles.dropdown}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option disabled hidden value="choose">
-              Select Category
-            </option>
-            <option value="blog">Blog</option>
-            <option value="event">Event</option>
-            <option value="medical-helps">Medical Helps</option>
-            <option value="article">Article</option>
-            <option value="donation">Donation</option>
-            <option value="educational-visit">Educational Visit</option>
-            <option value="festival-celebration">Festival Celebration</option>
-          </select>
-        </span>
-        <button type="submit" className={styles.submit} disabled={isLoading}>
-          {isLoading ? (
-            <div className={styles.loader}></div>
-          ) : props.function === "create" ? (
-            "Create Post"
-          ) : (
-            "Save Changes"
+            value={title}
+            id="title"
+            type="text"
+            placeholder="Enter your post title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            value={description}
+            placeholder="Enter your post description"
+            onChange={(e) => setDescription(e.target.value)}
+            rows="3"
+          />
+          <label for="cover-photo-url">
+            Cover Photo URL <span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            type="file"
+            id="cover-photo-url"
+            placeholder="Enter cover photo URL"
+            onChange={async (e) => {
+              try {
+                const file = e.target.files[0];
+                const image = await resizeFile(file);
+                setCoverPhoto(image);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          />
+          {coverPhoto && (
+            <img
+              src={coverPhoto}
+              alt="cover"
+              className={styles["cover-photo"]}
+            />
           )}
-        </button>
-      </form>
+          <label for="content">
+            Post Content <span style={{ color: "red" }}>*</span>
+          </label>
+          <div>
+            <JoditEditor
+              id="content"
+              ref={editor}
+              value={content}
+              config={config}
+              onBlur={(newContent) => setContent(newContent)}
+              onChange={(newContent) => {}}
+              className={styles.content}
+              tabIndex={1}
+            />
+          </div>
+          <span>
+            <label for="category">
+              Category <span style={{ color: "red" }}>*</span>
+            </label>
+            <select
+              required
+              value={category === "" ? "choose" : category}
+              id="category"
+              className={styles.dropdown}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option disabled hidden value="choose">
+                Select Category
+              </option>
+              <option value="blog">Blog</option>
+              <option value="event">Event</option>
+              <option value="medical-helps">Medical Helps</option>
+              <option value="article">Article</option>
+              <option value="donation">Donation</option>
+              <option value="educational-visit">Educational Visit</option>
+              <option value="festival-celebration">Festival Celebration</option>
+            </select>
+          </span>
+          <button type="submit" className={styles.submit} disabled={isLoading}>
+            {isLoading ? (
+              <div className={styles.loader}></div>
+            ) : props.function === "create" ? (
+              "Create Post"
+            ) : (
+              "Save Changes"
+            )}
+          </button>
+        </form>
+      )}
     </>
   );
 };

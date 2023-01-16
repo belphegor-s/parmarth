@@ -64,7 +64,6 @@ const Post = () => {
             <div className={styles["post-info"]}>
               <p className={styles.category}>
                 <strong>Category:</strong> {categoryMap[data?.category]}
-                &nbsp;&nbsp;|&nbsp;&nbsp;
               </p>
               <p className={styles.category}>
                 <strong>Last Updated:</strong>&nbsp;
