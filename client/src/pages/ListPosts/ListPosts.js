@@ -164,6 +164,7 @@ const ListPost = () => {
             })
             .catch((err) => console.log(err));
         }}
+        isLoading={isLoading}
       >
         {isDeleting ? (
           <div

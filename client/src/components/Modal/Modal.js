@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
 
-const Modal = ({ open, children, onClose, onConfirm }) => {
+const Modal = ({ open, children, onClose, onConfirm, isLoading }) => {
   if (!open) {
     return null;
   }
@@ -13,10 +13,18 @@ const Modal = ({ open, children, onClose, onConfirm }) => {
       <div className={styles.modal}>
         {children}
         <div className={styles["options"]}>
-          <button className={styles["confirm-btn"]} onClick={onConfirm}>
+          <button
+            className={styles["confirm-btn"]}
+            onClick={onConfirm}
+            disabled={isLoading}
+          >
             Confirm
           </button>
-          <button className={styles["cancel-btn"]} onClick={onClose}>
+          <button
+            className={styles["cancel-btn"]}
+            onClick={onClose}
+            disabled={isLoading}
+          >
             Cancel
           </button>
         </div>

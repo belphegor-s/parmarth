@@ -143,7 +143,7 @@ const AddRteData = () => {
               setExcelFile(e.target.files[0]);
             }}
           />
-          <button type="submit" className={styles.submit}>
+          <button type="submit" className={styles.submit} disabled={isLoading}>
             {isLoading ? <div className={styles.loader}></div> : "Upload"}
           </button>
         </form>
@@ -191,7 +191,7 @@ const AddRteData = () => {
             onChange={(e) => setAcademicYear(e.target.value)}
           />
 
-          <button type="submit" className={styles.submit}>
+          <button type="submit" className={styles.submit} disabled={isLoading}>
             {isLoading ? <div className={styles.loader}></div> : "Submit"}
           </button>
         </form>

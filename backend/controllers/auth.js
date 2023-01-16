@@ -125,6 +125,7 @@ exports.createUser = (req, res, next) => {
               email: email.trim(),
               password: hash,
               status2FA: false,
+              userType: userType,
             });
 
             data
@@ -160,21 +161,6 @@ exports.getUsers = (req, res, next) => {
     .catch((err) => res.status(500).json({ error: err }));
 };
 
-exports.getUsers = (req, res, next) => {
-  Admin.find(
-    { email: { $exists: true } },
-    { email: 1, status2FA: 1, userType: 1 },
-  )
-    .then((data) => {
-      if (!data) {
-        return res.status(404).json({ error: "No User found" });
-      } else if (data) {
-        return res.status(200).json(data);
-      }
-    })
-    .catch((err) => res.status(500).json({ error: err }));
-};
-
 exports.getUserType = (req, res, next) => {
   const { id } = req.params;
 
@@ -187,4 +173,28 @@ exports.getUserType = (req, res, next) => {
       }
     })
     .catch((err) => res.status(500).json({ error: err }));
+};
+
+exports.deleteUser = (req, res, next) => {
+  const { id, masterId } = req.params;
+
+  Admin.findOne({ _id: masterId, userType: "master" })
+    .then((data) => {
+      if (!data) {
+        return res.status(422).json({
+          error: "Data delete request can't be fulfilled. Not authorized.",
+        });
+      } else {
+        Admin.findByIdAndRemove(id)
+          .then((data) => {
+            if (!data) {
+              return res.status(422).json({ error: "Couldn't find Data" });
+            } else {
+              return res.status(200).json({ message: "Data Deleted" });
+            }
+          })
+          .catch((err) => res.status(500).json({ error: err.message }));
+      }
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
 };

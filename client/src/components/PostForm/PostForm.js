@@ -91,6 +91,7 @@ const PostForm = (props) => {
 
   const onFormSubmitHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!isTitleValid(title)) {
       toast.error("Title can't be empty");
@@ -257,7 +258,7 @@ const PostForm = (props) => {
             <option value="festival-celebration">Festival Celebration</option>
           </select>
         </span>
-        <button type="submit" className={styles.submit}>
+        <button type="submit" className={styles.submit} disabled={isLoading}>
           {isLoading ? (
             <div className={styles.loader}></div>
           ) : props.function === "create" ? (

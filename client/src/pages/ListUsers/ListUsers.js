@@ -5,10 +5,15 @@ import Footer from "../../components/Footer/Footer";
 import toast from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
 import backendUrl from "../../backendUrl";
+import Modal from "../../components/Modal/Modal";
+import { AiFillDelete } from "react-icons/ai";
 
 const ListUsers = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [userToBeDeleted, setUserToBeDeleted] = useState("");
+  const [modalState, setModalState] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const authCtx = useContext(AuthContext);
 
@@ -55,9 +60,10 @@ const ListUsers = () => {
                 <th>User Type</th>
                 <th>2FA Status</th>
                 <th>2FA Action</th>
+                <th>Delete User</th>
               </tr>
               {isLoading ? (
-                <td colSpan={6}>
+                <td colSpan={7}>
                   <div className={styles.loader}></div>
                 </td>
               ) : (
@@ -121,6 +127,17 @@ const ListUsers = () => {
                         {res.status2FA ? "Disable" : "Enable 2FA"}
                       </button>
                     </td>
+                    <td style={{ backgroundColor: "#ffffff" }}>
+                      <button
+                        className={styles["delete-button"]}
+                        onClick={() => {
+                          setUserToBeDeleted(res._id);
+                          setModalState(true);
+                        }}
+                      >
+                        Delete User
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -128,6 +145,73 @@ const ListUsers = () => {
           </div>
         </div>
       </div>
+      <Modal
+        open={modalState}
+        onClose={() => {
+          setModalState(false);
+          setUserToBeDeleted("");
+        }}
+        onConfirm={async () => {
+          setIsDeleting(true);
+          await fetch(
+            `${backendUrl}/deleteUser/${localStorage.getItem(
+              "userId",
+            )}/${userToBeDeleted}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + authCtx.token,
+              },
+            },
+          )
+            .then((result) => result.json())
+            .then((resData) => {
+              if (resData.error) {
+                toast.error(resData.error);
+                setIsDeleting(false);
+                setModalState(false);
+              } else if (resData.message) {
+                toast.success(resData.message);
+                setIsDeleting(false);
+                setModalState(false);
+                getUsers();
+              }
+            })
+            .catch((err) => toast.error(err.messsage));
+        }}
+        isLoading={isLoading}
+      >
+        {isDeleting ? (
+          <div
+            className={styles.loader}
+            style={{ marginBottom: "2.5rem" }}
+          ></div>
+        ) : (
+          <>
+            <span className={styles["delete-btn"]}>
+              <AiFillDelete />
+            </span>
+            <div
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                color: "#db1b1b",
+              }}
+            >
+              Confirm Delete
+            </div>
+            <p
+              style={{
+                color: "#db1b1b",
+              }}
+            >
+              This Operation is irreversible
+            </p>
+            <br />
+          </>
+        )}
+      </Modal>
       <Footer />
     </>
   );

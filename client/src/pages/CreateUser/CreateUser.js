@@ -143,7 +143,7 @@ const CreateUser = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
-          <button className={styles.submit} type="submit">
+          <button className={styles.submit} type="submit" disable={isLoading}>
             {isLoading ? <div className={styles.loader}></div> : "Create User"}
           </button>
         </form>
