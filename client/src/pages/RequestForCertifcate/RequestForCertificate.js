@@ -237,7 +237,7 @@ const RequestForCertificate = () => {
             </>
           )}
 
-          <button type="submit" className={styles.submit}>
+          <button type="submit" className={styles.submit} disabled={isLoading}>
             {isLoading ? <div className={styles.loader}></div> : "Submit"}
           </button>
         </form>
