@@ -5,19 +5,36 @@ import styles from "./Events.module.css";
 import Masonry from "react-masonry-css";
 import backendUrl from "../../backendUrl";
 import PostCard from "../../components/PostCard/PostCard";
+import toast from "react-hot-toast";
+import Pagination from "../../components/Pagination/Pagination";
 
 const Events = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const getData = async (url) => {
     setIsLoading(true);
-    (async () => {
-      const res = await fetch(`${backendUrl}/getPostByCategory/event`);
-      const resData = await res.json();
-      setData(resData);
-      setIsLoading(false);
-    })();
+
+    await fetch(url)
+      .then((res) => {
+        if (res.status !== 200) {
+          return [];
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        if (!resData || !resData?.posts) {
+          toast.error("Failed to load Posts");
+        }
+        setData(resData);
+      })
+      .catch((err) => toast.error(err.message));
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getData(`${backendUrl}/getPostByCategory/event`);
   }, []);
 
   return (
@@ -35,7 +52,7 @@ const Events = () => {
 
         <Masonry
           breakpointCols={{
-            default: 3,
+            default: data?.posts?.length >= 3 ? 3 : 2,
             1100: 2,
             768: 1,
           }}
@@ -45,9 +62,16 @@ const Events = () => {
           {isLoading ? (
             <div className={styles.loader}></div>
           ) : (
-            data.map((item) => <PostCard key={item._id} data={item} />)
+            data?.posts?.map((item) => <PostCard key={item._id} data={item} />)
           )}
         </Masonry>
+        {!isLoading && (
+          <Pagination
+            data={data}
+            fetchData={getData}
+            apiUrl={`${backendUrl}/getPostByCategory/event`}
+          />
+        )}
       </div>
       <Footer />
     </>

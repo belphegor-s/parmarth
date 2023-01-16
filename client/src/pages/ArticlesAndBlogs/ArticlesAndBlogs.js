@@ -5,27 +5,36 @@ import styles from "./ArticlesAndBlogs.module.css";
 import PostCard from "../../components/PostCard/PostCard";
 import backendUrl from "../../backendUrl";
 import Masonry from "react-masonry-css";
+import Pagination from "../../components/Pagination/Pagination";
+import toast from "react-hot-toast";
 
 const ArticlesAndBlogs = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const getData = async (url) => {
     setIsLoading(true);
-    (async () => {
-      const articleRes = await fetch(`${backendUrl}/getPostByCategory/article`);
-      const articleData = await articleRes.json();
 
-      const blogRes = await fetch(`${backendUrl}/getPostByCategory/blog`);
-      const blogData = await blogRes.json();
+    await fetch(url)
+      .then((res) => {
+        if (res.status !== 200) {
+          return [];
+        }
+        return res.json();
+      })
+      .then((resData) => {
+        if (!resData || !resData?.posts) {
+          toast.error("Failed to load Posts");
+        }
+        setData(resData);
+      })
+      .catch((err) => toast.error(err.message));
 
-      setData(
-        [...articleData, ...blogData].sort(
-          (a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated),
-        ),
-      );
-      setIsLoading(false);
-    })();
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getData(`${backendUrl}/getArticlesAndBlogs?page=1`);
   }, []);
 
   return (
@@ -36,7 +45,7 @@ const ArticlesAndBlogs = () => {
         <hr className={styles.hr} />
         <Masonry
           breakpointCols={{
-            default: 3,
+            default: data?.posts?.length >= 3 ? 3 : 2,
             1100: 2,
             768: 1,
           }}
@@ -46,9 +55,16 @@ const ArticlesAndBlogs = () => {
           {isLoading ? (
             <div className={styles.loader}></div>
           ) : (
-            data.map((item) => <PostCard key={item._id} data={item} />)
+            data?.posts?.map((item) => <PostCard key={item._id} data={item} />)
           )}
         </Masonry>
+        {!isLoading && (
+          <Pagination
+            data={data}
+            fetchData={getData}
+            apiUrl={`${backendUrl}/getArticlesAndBlogs`}
+          />
+        )}
       </div>
       <Footer />
     </>

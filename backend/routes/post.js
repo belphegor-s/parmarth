@@ -9,6 +9,7 @@ router.get(
   "/api/getPostByCategory/:category",
   postController.getPostByCategory,
 );
+router.get("/api/getArticlesAndBlogs", postController.getArticlesAndBlogs);
 router.post("/api/addPost", isAuth, postController.addPost);
 router.put("/api/editPost/:id", isAuth, postController.editPost);
 router.delete("/api/deletePost/:id", isAuth, postController.deletePost);

@@ -1,12 +1,33 @@
 const Post = require("../models/post");
 
 exports.getPosts = (req, res, next) => {
-  Post.find(
-    { title: { $exists: true } },
-    { title: 1, category: 1, createdAt: 1, lastUpdated: 1 },
-  )
+  const page = +req.query.page || 1;
+  const ITEMS_PER_PAGE = 10;
+
+  var totalPosts;
+
+  Post.find()
+    .count()
+    .then((numPosts) => {
+      totalPosts = numPosts;
+      return Post.find(
+        { title: { $exists: true } },
+        { title: 1, category: 1, createdAt: 1, lastUpdated: 1 },
+      )
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((posts) => {
-      res.status(200).json(posts);
+      res.status(200).json({
+        posts: posts,
+        totalPosts: totalPosts,
+        hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
+        currentPage: page,
+      });
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
@@ -23,14 +44,84 @@ exports.getPostById = (req, res, next) => {
 
 exports.getPostByCategory = (req, res, next) => {
   const { category } = req.params;
+  const page = +req.query.page || 1;
+  const ITEMS_PER_PAGE = 6;
 
-  Post.find(
-    { category: category },
-    { title: 1, description: 1, lastUpdated: 1, coverPhotoUrl: 1, category: 1 },
-  )
-    .sort({ lastUpdated: 1 })
-    .then((post) => {
-      res.status(200).json(post);
+  var totalPosts;
+
+  Post.count({
+    category: category,
+  })
+    .then((numPosts) => {
+      totalPosts = numPosts;
+      return Post.find(
+        { category: category },
+        {
+          title: 1,
+          description: 1,
+          lastUpdated: 1,
+          coverPhotoUrl: 1,
+          category: 1,
+        },
+      )
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
+    .then((posts) => {
+      res.status(200).json({
+        posts: posts,
+        totalPosts: totalPosts,
+        hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
+        currentPage: page,
+      });
+    })
+    .catch((err) => res.status(500).json({ error: err.message }));
+};
+
+exports.getArticlesAndBlogs = (req, res, next) => {
+  const page = +req.query.page || 1;
+  const ITEMS_PER_PAGE = 6;
+
+  var totalPosts;
+
+  Post.count({
+    $or: [{ category: { $eq: "article" } }, { category: { $eq: "blog" } }],
+  })
+    .then((numPosts) => {
+      totalPosts = numPosts;
+      return Post.find(
+        {
+          $or: [
+            { category: { $eq: "article" } },
+            { category: { $eq: "blog" } },
+          ],
+        },
+        {
+          title: 1,
+          description: 1,
+          lastUpdated: 1,
+          coverPhotoUrl: 1,
+          category: 1,
+        },
+      )
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
+    .then((posts) => {
+      res.status(200).json({
+        posts: posts,
+        totalPosts: totalPosts,
+        hasNextPage: ITEMS_PER_PAGE * page < totalPosts,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalPosts / ITEMS_PER_PAGE),
+        currentPage: page,
+      });
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };

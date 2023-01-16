@@ -8,6 +8,7 @@ import AuthContext from "../../store/auth-context";
 import backendUrl from "../../backendUrl";
 import Modal from "../../components/Modal/Modal";
 import { AiFillDelete } from "react-icons/ai";
+import Pagination from "../../components/Pagination/Pagination";
 
 const ListPost = () => {
   const [data, setData] = useState([]);
@@ -18,27 +19,29 @@ const ListPost = () => {
   const [modalState, setModalState] = useState(false);
   const authCtx = useContext(AuthContext);
 
-  const getPosts = async () => {
+  const getPosts = async (url) => {
     setIsLoading(true);
-    await fetch(`${backendUrl}/getPosts`)
+
+    await fetch(url)
       .then((res) => {
         if (res.status !== 200) {
           return [];
         }
         return res.json();
       })
-      .then((res) => {
-        if (res === []) {
+      .then((resData) => {
+        if (!resData || !resData?.posts) {
           toast.error("Failed to load Posts");
         }
-        setData(res);
+        setData(resData);
       })
       .catch((err) => toast.error(err.message));
+
     setIsLoading(false);
   };
 
   useEffect(() => {
-    getPosts();
+    getPosts(`${backendUrl}/getPosts?page=1`);
   }, []);
 
   return (
@@ -48,7 +51,7 @@ const ListPost = () => {
         <h1>List of Posts</h1>
         <div>
           <div className={styles.total}>
-            <strong>Total Entries:</strong> {data.length}
+            <strong>Total Entries:</strong> {data?.totalPosts}
           </div>
           <div style={{ overflowX: "auto" }}>
             <table>
@@ -62,8 +65,8 @@ const ListPost = () => {
                 <th>Edit Post</th>
                 <th>Delete Post</th>
               </tr>
-              {data.length !== 0 ? (
-                data.map((res, index) => (
+              {data?.posts?.length !== 0 ? (
+                data?.posts?.map((res, index) => (
                   <tr key={res._id}>
                     <td>{index + 1}</td>
                     <td>{res.title}</td>
@@ -133,6 +136,13 @@ const ListPost = () => {
             </table>
           </div>
         </div>
+        {!isLoading && (
+          <Pagination
+            data={data}
+            fetchData={getPosts}
+            apiUrl={`${backendUrl}/getPosts`}
+          />
+        )}
       </div>
       <Modal
         open={modalState}
