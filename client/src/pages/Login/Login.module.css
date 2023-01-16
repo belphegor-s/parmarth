@@ -2,12 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 .login-card {
   border: 2px solid #227bc0;
   border-radius: 10px;
+  margin: 2rem;
   padding: 2rem;
 }
 

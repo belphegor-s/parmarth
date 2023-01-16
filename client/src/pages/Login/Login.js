@@ -4,6 +4,8 @@ import { toast, Toaster } from "react-hot-toast";
 import AuthContext from "../../store/auth-context";
 import { useNavigate } from "react-router-dom";
 import backendUrl from "../../backendUrl";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -77,9 +79,10 @@ const Login = () => {
 
   return (
     <>
+      <Navbar />
       <div className={styles.main}>
         <div className={styles["login-card"]}>
-          <div className={styles.heading}>Admin Panel</div>
+          <div className={styles.heading}>Admin Login</div>
           <form
             className={styles["login-form"]}
             onSubmit={loginButtonClickHandler}
@@ -112,6 +115,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Footer />
       <Toaster />
     </>
   );

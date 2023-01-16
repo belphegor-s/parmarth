@@ -11,7 +11,7 @@ import { AiFillDelete } from "react-icons/ai";
 import Pagination from "../../components/Pagination/Pagination";
 
 const ListPost = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ posts: [] });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
