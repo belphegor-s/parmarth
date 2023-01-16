@@ -8,7 +8,7 @@ const Classes = () => {
     <>
       <Navbar />
       <div className={styles.body}>
-        <div className={styles.content} style={{ marginTop: 0 }}>
+        <div className={styles.content} style={{ marginTop: "2rem" }}>
           <img src="/img/teaching.jpg" alt="" />
           <hr className={styles.hr} />
           <h1>History</h1>

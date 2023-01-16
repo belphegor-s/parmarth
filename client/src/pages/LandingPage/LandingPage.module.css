@@ -1,10 +1,11 @@
 :root {
-  --nav-height: 122px;
+  --nav-height: 112px;
 }
 
 .parallax {
   background-image: url("../../assets/img/background.png");
   height: calc(100vh - var(--nav-height)) !important;
+  height: 100vh;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -78,7 +79,8 @@
 }
 
 .works {
-  margin: 5rem 0;
+  max-width: 1280px;
+  margin-top: 5rem;
 }
 
 .our-wings {
@@ -138,6 +140,13 @@
   .children {
     width: 80%;
     height: 250px;
+  }
+  .parallax > div {
+    max-width: 300px;
+  }
+  .our-wings {
+    width: 250px;
+    margin: auto;
   }
 }
 

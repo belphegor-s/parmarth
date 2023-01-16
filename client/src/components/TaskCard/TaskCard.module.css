@@ -24,12 +24,6 @@
 
 @media screen and (width< 520px) {
   .card {
-    width: 270px;
-  }
-}
-
-@media screen and (width>1280px) {
-  .card {
-    margin: 3rem;
+    width: 250px;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./LandingPage.module.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -8,21 +8,6 @@ import Footer from "../../components/Footer/Footer";
 import HelpCard from "../../components/HelpCard/HelpCard";
 
 const LandingPage = () => {
-  const setNavHeight = () => {
-    const navHeight = document.getElementById("navbar").offsetHeight;
-    const root = document.querySelector(":root");
-
-    root.style.setProperty("--nav-height", `${navHeight}px`);
-  };
-
-  window.addEventListener("load", setNavHeight);
-  window.addEventListener("resize", setNavHeight);
-
-  useEffect(() => {
-    window.addEventListener("resize", setNavHeight);
-    return () => window.removeEventListener("resize", setNavHeight);
-  }, []);
-
   return (
     <>
       <Navbar />

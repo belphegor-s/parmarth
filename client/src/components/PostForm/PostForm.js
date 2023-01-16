@@ -178,7 +178,7 @@ const PostForm = (props) => {
               color: "red",
             }}
           >
-            NOTE: Make sure to not upload large size Images
+            NOTE: Make sure not to upload large size Images
           </span>
         </h1>
         <label for="title">
