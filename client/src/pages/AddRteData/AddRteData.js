@@ -13,6 +13,7 @@ const AddRteData = () => {
   const [school, setSchool] = useState("");
   const [excelFile, setExcelFile] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const authCtx = useContext(AuthContext);
 
   const isStuddentNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
@@ -77,7 +78,7 @@ const AddRteData = () => {
 
   const onUploadFileSubmitHandler = async (e) => {
     e.preventDefault();
-
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("excelFile", excelFile);
 
@@ -95,6 +96,8 @@ const AddRteData = () => {
         }
       })
       .catch((err) => toast.error(err.message));
+
+    setIsUploading(false);
   };
 
   return (
@@ -143,8 +146,12 @@ const AddRteData = () => {
               setExcelFile(e.target.files[0]);
             }}
           />
-          <button type="submit" className={styles.submit} disabled={isLoading}>
-            {isLoading ? <div className={styles.loader}></div> : "Upload"}
+          <button
+            type="submit"
+            className={styles.submit}
+            disabled={isUploading}
+          >
+            {isUploading ? <div className={styles.loader}></div> : "Upload"}
           </button>
         </form>
         <h1>OR</h1>

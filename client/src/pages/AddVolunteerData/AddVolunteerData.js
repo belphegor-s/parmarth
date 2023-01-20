@@ -12,6 +12,8 @@ const AddVolunteerData = () => {
   const [branch, setBranch] = useState("");
   const [postHolded, setPostHolded] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [excelFile, setExcelFile] = useState("");
   const authCtx = useContext(AuthContext);
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
@@ -91,10 +93,98 @@ const AddVolunteerData = () => {
     setIsLoading(false);
   };
 
+  const onUploadFileSubmitHandler = async (e) => {
+    e.preventDefault();
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("excelFile", excelFile);
+
+    await fetch(`${backendUrl}/addVolunteerDataViaExcel`, {
+      method: "POST",
+      body: formData,
+      headers: { Authorization: "Bearer " + authCtx.token },
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        if (resData.error) {
+          toast.error(resData.error);
+        } else if (resData.message) {
+          toast.success(resData.message);
+        }
+      })
+      .catch((err) => toast.error(err.message));
+
+    setIsUploading(false);
+  };
+
   return (
     <>
       <Navbar />
       <div className={styles.body}>
+        <form
+          className={styles.form}
+          onSubmit={onUploadFileSubmitHandler}
+          encType="multipart/form-data"
+        >
+          <label for="excelFile">Upload an Excel file</label>
+          <div style={{ marginTop: "1rem" }}>
+            <span
+              style={{
+                fontSize: "16px",
+                fontWeight: "900",
+                color: "red",
+              }}
+            >
+              File Should contain only four columns and 1st row must have these
+              headings in the same manner and same order as well
+              <br />
+              <br />
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  color: "red",
+                }}
+              >
+                Branch should be only the following -
+                <br />
+                CS, CH, CE, IT, EC, EE, EI, ME
+              </span>
+              <span style={{ color: "#535353", fontWeight: "500" }}>
+                <ul>
+                  <li>Name</li>
+                  <li>Branch</li>
+                  <li>Roll Number</li>
+                  <li>Post Holded</li>
+                </ul>
+              </span>
+            </span>
+            <span style={{ color: "#535353", fontWeight: "500" }}>e.g.</span>
+            <img
+              src="/img/excel-file-secondary.png"
+              alt=""
+              className={styles["excel-image"]}
+            />
+          </div>
+          <input
+            id="excelFile"
+            type="file"
+            reqiured
+            name="excelFile"
+            onChange={(e) => {
+              setExcelFile(e.target.files[0]);
+            }}
+          />
+          <button
+            type="submit"
+            className={styles.submit}
+            disabled={isUploading}
+          >
+            {isUploading ? <div className={styles.loader}></div> : "Upload"}
+          </button>
+        </form>
+        <h1>OR</h1>
         <form className={styles.form} onSubmit={onFormSubmitHandler}>
           <h1>Add Volunteer Data</h1>
           <label for="name">Name</label>

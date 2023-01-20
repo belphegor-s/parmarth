@@ -101,6 +101,12 @@
   margin: auto;
 }
 
+.excel-image {
+  display: block;
+  width: 100%;
+  margin: 1rem auto;
+}
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
