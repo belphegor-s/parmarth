@@ -119,7 +119,7 @@ const AddRteData = () => {
               }}
             >
               File Should contain only four columns and 1st row must have these
-              headings in the same manner (order doesn't matter)
+              headings in the same manner and same order.
               <br />
               <span style={{ color: "#535353", fontWeight: "500" }}>
                 <ul>
