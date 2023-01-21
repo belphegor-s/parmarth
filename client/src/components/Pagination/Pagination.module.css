@@ -8,6 +8,7 @@
 .pagination > button:first-child,
 .pagination > button:last-child {
   margin: 0 4rem;
+  border-radius: 0.5em;
 }
 
 .pagination > button {
@@ -18,6 +19,7 @@
   padding: 0.8em;
   margin: 0 1em;
   font-weight: 600;
+  border-radius: 0.5em;
 }
 
 .pagination > button:hover {
