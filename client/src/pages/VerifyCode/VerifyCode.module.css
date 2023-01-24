@@ -42,7 +42,7 @@
 }
 
 .form > input:focus {
-  border: 1px solid #535353;
+  border: 1px solid #277bc0;
 }
 
 .form > button {

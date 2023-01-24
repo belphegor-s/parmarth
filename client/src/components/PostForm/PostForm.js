@@ -206,13 +206,12 @@ const PostForm = (props) => {
             onChange={(e) => setDescription(e.target.value)}
             rows="3"
           />
-          <label for="cover-photo-url">
-            Cover Photo URL <span style={{ color: "red" }}>*</span>
+          <label for="cover-photo">
+            Cover Photo <span style={{ color: "red" }}>*</span>
           </label>
           <input
             type="file"
-            id="cover-photo-url"
-            placeholder="Enter cover photo URL"
+            id="cover-photo"
             onChange={async (e) => {
               try {
                 const file = e.target.files[0];
