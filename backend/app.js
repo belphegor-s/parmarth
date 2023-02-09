@@ -1,9 +1,13 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const fs = require("fs");
 const PORT = 8080 || process.env.PORT;
-const dotenv = require("dotenv");
-dotenv.config();
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 
 //Routes
 const requestDataRoutes = require("./routes/requestData");
@@ -19,6 +23,15 @@ const imgUrlRoute = require("./routes/imgUrl");
 const app = express();
 
 app.use(express.json({ limit: "10mb" }));
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" },
+);
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
