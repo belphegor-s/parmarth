@@ -32,6 +32,9 @@ const requestSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  academicYear: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("Request", requestSchema);

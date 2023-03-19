@@ -12,37 +12,63 @@ const RequestReceived = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isApproveLoading, setIsApproveLoading] = useState(false);
+  const [purpose, setPurpose] = useState("general");
+
+  const getRequestData = async (purposeValue) => {
+    setIsLoading(true);
+
+    await fetch(`${backendUrl}/getRequestData`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + authCtx.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ purpose: purposeValue || "general" }),
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          return [];
+        }
+        return res.json();
+      })
+      .then((res) => {
+        if (res === []) {
+          toast.error("Failed to load Requests Received");
+        }
+        setData(res);
+      })
+      .catch((err) => toast.error(err.message));
+
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const getRequestData = async () => {
-      setIsLoading(true);
-
-      await fetch(`${backendUrl}/getRequestData`, {
-        headers: { Authorization: "Bearer " + authCtx.token },
-      })
-        .then((res) => {
-          if (res.status !== 200) {
-            return [];
-          }
-          return res.json();
-        })
-        .then((res) => {
-          if (res === []) {
-            toast.error("Failed to load Requests Received");
-          }
-          setData(res);
-        })
-        .catch((err) => toast.error(err.message));
-
-      setIsLoading(false);
-    };
-    getRequestData();
-  }, []);
+    getRequestData(purpose);
+  }, [purpose]);
 
   return (
     <>
       <Navbar />
       <div className={styles.body}>
+        <div className={styles["tabs-btn"]}>
+          <h4>Purpose Category</h4>
+          <button
+            onClick={() => {
+              setPurpose("general");
+            }}
+            className={purpose === "general" && styles["tab-active"]}
+          >
+            General
+          </button>
+          <button
+            onClick={() => {
+              setPurpose("event");
+            }}
+            className={purpose === "event" && styles["tab-active"]}
+          >
+            Event
+          </button>
+        </div>
         <div>
           <div className={styles.total}>
             <strong>Total Requests Received:</strong> {data.length}

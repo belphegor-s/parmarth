@@ -13,6 +13,7 @@ const RequestForCertificate = () => {
   const [postHolded, setPostHolded] = useState("");
   const [purpose, setPurpose] = useState("general");
   const [event, setEvent] = useState("");
+  const [academicYear, setAcademicYear] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
@@ -41,6 +42,8 @@ const RequestForCertificate = () => {
 
   const isPostHoldedValid = (postHolded) =>
     typeof postHolded === "string" && postHolded.trim().length > 0;
+
+  const isAcademicYearValid = (academicYear) => /\d\d\d\d/.test(academicYear);
 
   const isEventValid = (event) => {
     switch (event) {
@@ -71,6 +74,10 @@ const RequestForCertificate = () => {
       return;
     } else if (!isBranchValid(branch)) {
       toast.error("Select a branch");
+      setIsLoading(false);
+      return;
+    } else if (!isAcademicYearValid(academicYear)) {
+      toast.error("Enter a valid Academic Year");
       setIsLoading(false);
       return;
     }
@@ -234,6 +241,12 @@ const RequestForCertificate = () => {
                 <option value="muskan">Muskan</option>
                 <option value="udgam">Udgam</option>
               </select>
+              <label for="academic-year">Academic Year</label>
+              <input
+                type="text"
+                placeholder="e.g. 2022"
+                onChange={(e) => setAcademicYear(e.target.value)}
+              />
             </>
           )}
 

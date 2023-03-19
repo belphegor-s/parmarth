@@ -2,12 +2,22 @@ const Request = require("../models/request");
 const Volunteer = require("../models/volunteers");
 const Certificate = require("../models/certificate");
 
-exports.getRequestData = (req, res, next) => {
-  Request.find()
-    .then((requests) => {
-      res.status(200).json(requests);
-    })
-    .catch((err) => res.status(500).json({ error: err.message }));
+exports.getRequestData = async (req, res, next) => {
+  const { purpose } = req.body;
+
+  if (purpose === "general") {
+    Request.find({ purpose: "general" })
+      .then((requests) => {
+        res.status(200).json(requests);
+      })
+      .catch((err) => res.status(500).json({ error: err.message }));
+  } else if (purpose === "event") {
+    Request.find({ purpose: "event" })
+      .then((requests) => {
+        res.status(200).json(requests);
+      })
+      .catch((err) => res.status(500).json({ error: err.message }));
+  }
 };
 
 exports.addRequestData = (req, res, next) => {

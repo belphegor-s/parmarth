@@ -2,6 +2,36 @@
   padding: 2rem;
 }
 
+.tabs-btn {
+  text-align: center;
+}
+
+.tabs-btn button {
+  padding: 0.5em 1em;
+  border: 0.1em solid #277bc0;
+  background-color: #fff;
+  border-radius: 0.5em;
+  color: #000;
+  cursor: pointer;
+}
+
+.tabs-btn button:hover {
+  background-color: #277bc044;
+}
+
+.tabs-btn button.tab-active {
+  padding: 0.5em 1em;
+  border: 0.1em solid #277bc0;
+  background-color: #277bc0;
+  border-radius: 0.5em;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tabs-btn button:first-of-type {
+  margin-right: 1em;
+}
+
 .body > div {
   max-width: max-content;
   margin: 0 auto;
