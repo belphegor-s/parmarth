@@ -11,22 +11,23 @@ exports.getVolunteersData = (req, res, next) => {
 };
 
 exports.addVolunteerData = (req, res, next) => {
-  const { name, branch, rollNumber, postHolded } = req.body;
+  const { name, course, rollNumber, postHolded } = req.body;
+
+  var branch = "";
+  if (course === "B.Tech.") {
+    branch = req.body.branch;
+  }
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
 
   const isRollNumberValid = (rollNumber) => rollNumber.toString().length === 13;
 
-  const isBranchValid = (branch) => {
-    switch (branch) {
-      case "CE":
-      case "CH":
-      case "CS":
-      case "EC":
-      case "EE":
-      case "EI":
-      case "IT":
-      case "ME":
+  const isCourseValid = (course) => {
+    switch (course) {
+      case "B.Tech.":
+      case "M.Tech.":
+      case "MBA":
+      case "MCA":
         return true;
 
       default:
@@ -41,25 +42,27 @@ exports.addVolunteerData = (req, res, next) => {
     return res.status(422).json({ error: "Enter a valid name" });
   } else if (!isRollNumberValid(rollNumber)) {
     return res.status(422).json({ error: "Enter a valid roll number" });
-  } else if (!isBranchValid(branch)) {
-    return res.status(422).json({ error: "Enter your branch" });
+  } else if (!isCourseValid(course)) {
+    return res.status(422).json({ error: "Enter your course" });
   } else if (!isPostHoldedValid(postHolded)) {
     return res.status(422).json({ error: "Enter Post Holded" });
   }
 
   Volunteer.findOne({
     name: name.trim().toUpperCase(),
-    branch: branch.trim(),
+    course: course.trim().toUpperCase(),
     rollNumber: +rollNumber,
     postHolded: postHolded.trim().toUpperCase(),
+    ...(course === "B.Tech." && { branch: branch }),
   })
     .then((data) => {
       if (!data) {
         const volunteerData = new Volunteer({
           name: name.trim().toUpperCase(),
-          branch: branch.trim(),
+          course: course.trim().toUpperCase(),
           rollNumber: +rollNumber,
           postHolded: postHolded.trim().toUpperCase(),
+          ...(course === "B.Tech." && { branch: branch }),
         });
         volunteerData
           .save()
@@ -87,9 +90,6 @@ exports.addVolunteerDataViaExcel = (req, res, next) => {
 
   var volunteersData = [];
 
-  var flag = false;
-  const branches = ["CE", "CH", "CS", "EC", "EE", "EI", "IT", "ME"];
-
   sheetNameList.forEach((y) => {
     var worksheet = workbook.Sheets[y];
     var headers = {};
@@ -114,15 +114,8 @@ exports.addVolunteerDataViaExcel = (req, res, next) => {
       }
       if (!volunteersData[row]) volunteersData[row] = {};
 
-      if (col === "C") {
+      if (col === "D") {
         volunteersData[row][headers[col]] = +value;
-      } else if (col === "B") {
-        if (branches.includes(value.toString().toUpperCase())) {
-          volunteersData[row][headers[col]] = value.toString().toUpperCase();
-        } else {
-          flag = true;
-          break;
-        }
       } else {
         volunteersData[row][headers[col]] = value.toString().toUpperCase();
       }
@@ -130,19 +123,6 @@ exports.addVolunteerDataViaExcel = (req, res, next) => {
     volunteersData.shift();
     volunteersData.shift();
   });
-
-  if (flag) {
-    fs.unlinkSync(filePath, (err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      } else {
-        console.log("File deleted");
-      }
-    });
-    return res
-      .status(200)
-      .json({ error: "Branch entered is Invalid or not in format" });
-  }
 
   Volunteer.insertMany(volunteersData)
     .then(() => {

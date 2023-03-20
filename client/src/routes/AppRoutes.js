@@ -27,6 +27,8 @@ import toast from "react-hot-toast";
 import FestivalCelebration from "../pages/FestivalCelebration/FestivalCelebration";
 import ArticlesAndBlogs from "../pages/ArticlesAndBlogs/ArticlesAndBlogs";
 import ConvertUrl from "../pages/ConvertUrl/ConvertUrl";
+import AddEventVolunteersData from "../pages/AddEventVolunteersData/AddEventVolunteersData";
+import EventVolunteersData from "../pages/EventVolunteersData/EventVolunteersData";
 
 const AppRoutes = () => {
   const authCtx = useContext(AuthContext);
@@ -106,6 +108,22 @@ const AppRoutes = () => {
           userType === "teachers" ||
           userType === "media") && (
           <Route path="/add-volunteer-data" element={<AddVolunteerData />} />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" || userType === "teachers") && (
+          <Route
+            path="/event-volunteers-data"
+            element={<EventVolunteersData />}
+          />
+        )}
+      {authCtx.isLoggedIn &&
+        (userType === "master" ||
+          userType === "teachers" ||
+          userType === "media") && (
+          <Route
+            path="/add-event-volunteers-data"
+            element={<AddEventVolunteersData />}
+          />
         )}
       {authCtx.isLoggedIn && userType === "master" && (
         <Route path="/create-user" element={<CreateUser />} />

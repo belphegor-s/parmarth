@@ -1,5 +1,6 @@
 const Request = require("../models/request");
 const Volunteer = require("../models/volunteers");
+const EventVolunteer = require("../models/eventVolunteers");
 const Certificate = require("../models/certificate");
 
 exports.getRequestData = async (req, res, next) => {
@@ -22,14 +23,21 @@ exports.getRequestData = async (req, res, next) => {
 
 exports.addRequestData = (req, res, next) => {
   // Validation
-  const { name, email, branch, rollNumber, purpose } = req.body;
+  const { name, email, course, rollNumber, purpose } = req.body;
 
   var postHolded = "",
-    event = "";
+    event = "",
+    academicYear = "";
   if (purpose === "general") {
     postHolded = req.body.postHolded;
   } else if (purpose === "event") {
     event = req.body.event;
+    academicYear = req.body.academicYear;
+  }
+
+  var branch = "";
+  if (course === "B.Tech.") {
+    branch = req.body.branch;
   }
 
   const isNameValid = (name) => /^[a-zA-Z ]{2,30}$/.test(name);
@@ -39,16 +47,12 @@ exports.addRequestData = (req, res, next) => {
 
   const isRollNumberValid = (rollNumber) => rollNumber.toString().length === 13;
 
-  const isBranchValid = (branch) => {
-    switch (branch) {
-      case "CE":
-      case "CH":
-      case "CS":
-      case "EC":
-      case "EE":
-      case "EI":
-      case "IT":
-      case "ME":
+  const isCourseValid = (course) => {
+    switch (course) {
+      case "B.Tech":
+      case "M.Tech":
+      case "MBA":
+      case "MCA":
         return true;
 
       default:
@@ -75,8 +79,8 @@ exports.addRequestData = (req, res, next) => {
     return res.status(422).json({ error: "Enter a valid email" });
   } else if (!isRollNumberValid(rollNumber)) {
     return res.status(422).json({ error: "Enter a valid roll number" });
-  } else if (!isBranchValid(branch)) {
-    return res.status(422).json({ error: "Enter your branch" });
+  } else if (!isCourseValid(course)) {
+    return res.status(422).json({ error: "Enter your course" });
   }
 
   if (purpose === "general") {
@@ -89,78 +93,131 @@ exports.addRequestData = (req, res, next) => {
     }
   }
 
-  var dataExist = null;
-  Volunteer.findOne({
-    name: name.trim().toUpperCase(),
-    branch: branch.trim(),
-    rollNumber: +rollNumber,
-  })
-    .then((data) => {
-      if (!data) {
-        dataExist = false;
-      } else if (data.rollNumber === rollNumber) {
-        dataExist = true;
-      }
-
-      Request.findOne({ rollNumber: rollNumber })
-        .then((data) => {
-          if (!data) {
-            Certificate.findOne({
-              name: name.toUpperCase(),
-              email: email.toLowerCase(),
-              branch: branch,
-              rollNumber: +rollNumber,
-              purpose: purpose,
-              ...(purpose === "general" && {
-                postHolded: postHolded,
-              }),
-              ...(purpose === "event" && { event: event }),
-            })
-              .then((result) => {
-                if (!result) {
-                  const requestData = new Request({
-                    name: name.trim().toUpperCase(),
-                    email: email.trim().toLowerCase(),
-                    branch: branch.trim(),
-                    rollNumber: +rollNumber,
-                    purpose: purpose.trim(),
-                    ...(purpose === "general" && { postHolded: postHolded }),
-                    ...(purpose === "event" && { event: event }),
-                    dataExist: dataExist,
-                  });
-
-                  if (requestData.dataExist === null) {
-                    return res
-                      .status(422)
-                      .json({ error: "Couldn't check if data exists" });
-                  }
-                  requestData
-                    .save()
-                    .then(() => {
-                      console.log("Added Data");
-                      return res
-                        .status(201)
-                        .json({ message: "Successfully added your request" });
-                    })
-                    .catch((err) =>
-                      res.status(500).json({ error: err.message }),
-                    );
-                } else if (result.rollNumber === rollNumber) {
-                  return res.status(422).json({
-                    error: "Certificate already issued with same data",
-                  });
-                }
-              })
-              .catch((err) => res.status(500).json({ error: err.message }));
-          } else if (data.rollNumber === rollNumber) {
-            return res
-              .status(422)
-              .json({ error: "Data with same roll number already exist" });
-          }
-        })
-        .catch((err) => res.status(500).json({ error: err.message }));
+  if (purpose === "general") {
+    var dataExist = null;
+    Volunteer.findOne({
+      name: name.trim().toUpperCase(),
+      course: course.trim(),
+      rollNumber: +rollNumber,
     })
-    .catch((err) => res.status(500).json({ error: err.message }));
+      .then((data) => {
+        if (!data) {
+          dataExist = false;
+        } else if (data.rollNumber === rollNumber) {
+          dataExist = true;
+        }
+
+        Request.findOne({ rollNumber: rollNumber })
+          .then((data) => {
+            if (!data) {
+              Certificate.findOne({
+                name: name.toUpperCase(),
+                email: email.toLowerCase(),
+                course: course.trim().toUpperCase(),
+                rollNumber: +rollNumber,
+                purpose: purpose,
+                ...(course === "B.Tech." && { branch: branch }),
+                event: event,
+              })
+                .then((result) => {
+                  if (!result) {
+                    const requestData = new Request({
+                      name: name.trim().toUpperCase(),
+                      email: email.trim().toLowerCase(),
+                      course: course.trim().toUpperCase(),
+                      ...(course === "B.Tech." && { branch: branch }),
+                      rollNumber: +rollNumber,
+                      purpose: purpose.trim(),
+                      postHolded: postHolded,
+                      dataExist: dataExist,
+                    });
+
+                    if (requestData.dataExist === null) {
+                      return res
+                        .status(422)
+                        .json({ error: "Couldn't check if data exists" });
+                    }
+                    requestData
+                      .save()
+                      .then(() => {
+                        console.log("Added Data");
+                        return res
+                          .status(201)
+                          .json({ message: "Successfully added your request" });
+                      })
+                      .catch((err) =>
+                        res.status(500).json({ error: err.message }),
+                      );
+                  } else if (result.rollNumber === rollNumber) {
+                    return res.status(422).json({
+                      error: "Certificate already issued with same data",
+                    });
+                  }
+                })
+                .catch((err) => res.status(500).json({ error: err.message }));
+            } else if (data.rollNumber === rollNumber) {
+              return res
+                .status(422)
+                .json({ error: "Data with same roll number already exist" });
+            }
+          })
+          .catch((err) => res.status(500).json({ error: err.message }));
+      })
+      .catch((err) => res.status(500).json({ error: err.message }));
+  } else if (purpose === "event") {
+    EventVolunteer.find({
+      name: name.trim().toUpperCase(),
+      course: course.trim(),
+      rollNumber: +rollNumber,
+      event: event,
+    }).then((data) => {
+      var dataExist = false;
+      if (!data) {
+        const requestData = new Request({
+          name: name.trim().toUpperCase(),
+          email: email.trim().toLowerCase(),
+          course: course.trim().toUpperCase(),
+          ...(course === "B.Tech." && { branch: branch }),
+          rollNumber: +rollNumber,
+          purpose: purpose.trim(),
+          event: event,
+          dataExist: dataExist,
+        });
+
+        requestData
+          .save()
+          .then(() => {
+            console.log("Added Data");
+            return res
+              .status(201)
+              .json({ message: "Successfully added your request" });
+          })
+          .catch((err) => res.status(500).json({ error: err.message }));
+      } else {
+        dataExist = true;
+        const requestData = new Request({
+          name: name.trim().toUpperCase(),
+          email: email.trim().toLowerCase(),
+          course: course.trim().toUpperCase(),
+          ...(course === "B.Tech." && { branch: branch }),
+          rollNumber: +rollNumber,
+          purpose: purpose.trim(),
+          event: event,
+          dataExist: dataExist,
+        });
+
+        requestData
+          .save()
+          .then(() => {
+            console.log("Added Data");
+            return res
+              .status(201)
+              .json({ message: "Successfully added your request" });
+          })
+          .catch((err) => res.status(500).json({ error: err.message }));
+      }
+    });
+  }
 };
 
 exports.deleteRequestData = (req, res, next) => {

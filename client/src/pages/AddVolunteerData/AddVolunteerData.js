@@ -9,6 +9,7 @@ import backendUrl from "../../backendUrl";
 const AddVolunteerData = () => {
   const [name, setName] = useState("");
   const [rollNumber, setRollNumber] = useState(0);
+  const [course, setCourse] = useState("");
   const [branch, setBranch] = useState("");
   const [postHolded, setPostHolded] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,16 +21,12 @@ const AddVolunteerData = () => {
 
   const isRollNumberValid = (rollNumber) => rollNumber.length === 13;
 
-  const isBranchValid = (branch) => {
-    switch (branch) {
-      case "CE":
-      case "CH":
-      case "CS":
-      case "EC":
-      case "EE":
-      case "EI":
-      case "IT":
-      case "ME":
+  const isCourseValid = (course) => {
+    switch (course) {
+      case "B.Tech":
+      case "M.Tech":
+      case "MBA":
+      case "MCA":
         return true;
 
       default:
@@ -53,8 +50,8 @@ const AddVolunteerData = () => {
       toast.error("Enter a valid roll number");
       setIsLoading(false);
       return;
-    } else if (!isBranchValid(branch)) {
-      toast.error("Select a branch");
+    } else if (!isCourseValid(course)) {
+      toast.error("Select a course");
       setIsLoading(false);
       return;
     } else if (!isPostHoldedValid(postHolded)) {
@@ -66,8 +63,9 @@ const AddVolunteerData = () => {
     const data = {
       name: name,
       rollNumber: +rollNumber,
-      branch: branch,
+      course: course,
       postHolded: postHolded,
+      ...(course === "B.Tech" && { branch: branch }),
     };
 
     fetch(`${backendUrl}/addVolunteerData`, {
@@ -136,7 +134,7 @@ const AddVolunteerData = () => {
                 color: "red",
               }}
             >
-              File Should contain only four columns and 1st row must have these
+              File Should contain only five columns and 1st row must have these
               headings in the same manner and same order as well
               <br />
               <br />
@@ -147,14 +145,18 @@ const AddVolunteerData = () => {
                   color: "red",
                 }}
               >
-                Branch should be only the following -
+                Courses should be only the following -
                 <br />
-                CS, CH, CE, IT, EC, EE, EI, ME
+                B.Tech | M.Tech | MBA | MCA
               </span>
               <span style={{ color: "#535353", fontWeight: "500" }}>
                 <ul>
                   <li>Name</li>
-                  <li>Branch</li>
+                  <li>Course</li>
+                  <li>
+                    Branch (optional - leave this field empty in case of branch
+                    other than <strong>B.Tech</strong>)
+                  </li>
                   <li>Roll Number</li>
                   <li>Post Holded</li>
                 </ul>
@@ -203,30 +205,50 @@ const AddVolunteerData = () => {
             placeholder="Enter your roll number"
             onChange={(e) => setRollNumber(e.target.value)}
           />
-          <label for="branch">Branch</label>
+          <label for="course">Course</label>
           <select
             required
-            id="branch"
+            id="course"
             defaultValue="choose"
             className={styles["branch-dropdown"]}
-            onChange={(e) => setBranch(e.target.value)}
+            onChange={(e) => setCourse(e.target.value)}
           >
             <option disabled hidden value="choose">
               Select Branch
             </option>
-            <option value="CE">CE - Civil Engineering</option>
-            <option value="CH">CH - Chemical Engineering</option>
-            <option value="CS">CS - Computer Science Engineering</option>
-            <option value="EC">
-              EC - Electronics and Communication Engineering
-            </option>
-            <option value="EE">EE - Electrical Engineering</option>
-            <option value="EI">
-              EI - Electronics and Instrumentation Engineering
-            </option>
-            <option value="IT">IT - Information Technology</option>
-            <option value="ME">ME - Mechanical Engineering</option>
+            <option value="B.Tech">B.Tech.</option>
+            <option value="M.Tech">M.Tech.</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
           </select>
+          {course === "B.Tech" && (
+            <>
+              <label for="branch">Branch</label>
+              <select
+                required
+                id="branch"
+                defaultValue="choose"
+                className={styles["branch-dropdown"]}
+                onChange={(e) => setBranch(e.target.value)}
+              >
+                <option disabled hidden value="choose">
+                  Select Branch
+                </option>
+                <option value="CE">CE - Civil Engineering</option>
+                <option value="CH">CH - Chemical Engineering</option>
+                <option value="CS">CS - Computer Science Engineering</option>
+                <option value="EC">
+                  EC - Electronics and Communication Engineering
+                </option>
+                <option value="EE">EE - Electrical Engineering</option>
+                <option value="EI">
+                  EI - Electronics and Instrumentation Engineering
+                </option>
+                <option value="IT">IT - Information Technology</option>
+                <option value="ME">ME - Mechanical Engineering</option>
+              </select>
+            </>
+          )}
           <label for="post-holded">Post Holded</label>
           <input
             required

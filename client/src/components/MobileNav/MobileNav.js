@@ -277,6 +277,38 @@ const MobileNav = () => {
                     </NavLink>
                   </li>
                 )}
+                {(userType === "master" || userType === "teachers") && (
+                  <li>
+                    <NavLink
+                      to="/event-volunteers-data"
+                      className={
+                        pathname === "/event-volunteers-data"
+                          ? "mobile-nav__active"
+                          : "mobile-nav__link"
+                      }
+                      style={{ fontSize: "18px" }}
+                    >
+                      Get Event Volunteers Data
+                    </NavLink>
+                  </li>
+                )}
+                {(userType === "master" ||
+                  userType === "teachers" ||
+                  userType === "media") && (
+                  <li>
+                    <NavLink
+                      to="/add-event-volunteers-data"
+                      className={
+                        pathname === "/add-event-volunteers-data"
+                          ? "mobile-nav__active"
+                          : "mobile-nav__link"
+                      }
+                      style={{ fontSize: "18px" }}
+                    >
+                      Add Event Volunteers Data
+                    </NavLink>
+                  </li>
+                )}
                 {(userType === "master" ||
                   userType === "media" ||
                   userType === "teachers") && (

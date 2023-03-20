@@ -36,6 +36,7 @@ const Volunteers = () => {
     };
     getVolunteersData();
   }, []);
+
   return (
     <>
       <Navbar />
@@ -49,7 +50,7 @@ const Volunteers = () => {
               <tr>
                 <th>S. No.</th>
                 <th>Name</th>
-                <th>Branch</th>
+                <th>Course (Branch)</th>
                 <th>Roll Number</th>
                 <th>Post Holded</th>
               </tr>
@@ -62,7 +63,9 @@ const Volunteers = () => {
                   <tr key={res._id}>
                     <td>{index + 1}</td>
                     <td>{res.name}</td>
-                    <td>{res.branch}</td>
+                    <td>
+                      {res.course} {res?.branch && <span>({res?.branch})</span>}
+                    </td>
                     <td>{res.rollNumber}</td>
                     <td>{res.postHolded}</td>
                   </tr>

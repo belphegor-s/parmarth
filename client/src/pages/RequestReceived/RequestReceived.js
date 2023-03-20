@@ -79,7 +79,7 @@ const RequestReceived = () => {
               <tr>
                 <th>S. No.</th>
                 <th>Name</th>
-                <th>Branch</th>
+                <th>Course</th>
                 <th>Roll Number</th>
                 <th>Email</th>
                 <th>Purpose</th>
@@ -96,7 +96,9 @@ const RequestReceived = () => {
                   <tr key={res._id}>
                     <td>{index + 1}</td>
                     <td>{res.name}</td>
-                    <td>{res.branch}</td>
+                    <td>
+                      {res.course} {res?.branch && <span>({res?.branch})</span>}
+                    </td>
                     <td>{res.rollNumber}</td>
                     <td>{res.email}</td>
                     <td>

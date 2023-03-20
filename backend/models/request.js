@@ -10,9 +10,12 @@ const requestSchema = new Schema({
     type: String,
     required: true,
   },
-  branch: {
+  course: {
     type: String,
     required: true,
+  },
+  branch: {
+    type: String,
   },
   rollNumber: {
     type: Number,

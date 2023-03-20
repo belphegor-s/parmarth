@@ -5,9 +5,10 @@ module.exports = mongoose.model(
   "Volunteer",
   new Schema({
     name: String,
+    course: String,
     branch: String,
     rollNumber: Number,
     postHolded: String,
   }),
-  "volunteers"
+  "volunteers",
 );

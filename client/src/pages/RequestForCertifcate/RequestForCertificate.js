@@ -9,6 +9,7 @@ const RequestForCertificate = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [rollNumber, setRollNumber] = useState(0);
+  const [course, setCourse] = useState("");
   const [branch, setBranch] = useState("");
   const [postHolded, setPostHolded] = useState("");
   const [purpose, setPurpose] = useState("general");
@@ -23,16 +24,12 @@ const RequestForCertificate = () => {
 
   const isRollNumberValid = (rollNumber) => rollNumber.length === 13;
 
-  const isBranchValid = (branch) => {
-    switch (branch) {
-      case "CE":
-      case "CH":
-      case "CS":
-      case "EC":
-      case "EE":
-      case "EI":
-      case "IT":
-      case "ME":
+  const isCourseValid = (course) => {
+    switch (course) {
+      case "B.Tech":
+      case "M.Tech":
+      case "MBA":
+      case "MCA":
         return true;
 
       default:
@@ -72,8 +69,8 @@ const RequestForCertificate = () => {
       toast.error("Enter a valid roll number");
       setIsLoading(false);
       return;
-    } else if (!isBranchValid(branch)) {
-      toast.error("Select a branch");
+    } else if (!isCourseValid(course)) {
+      toast.error("Select a course");
       setIsLoading(false);
       return;
     } else if (!isAcademicYearValid(academicYear)) {
@@ -100,8 +97,10 @@ const RequestForCertificate = () => {
       name: name,
       email: email,
       rollNumber: +rollNumber,
-      branch: branch,
+      course: course,
       purpose: purpose,
+      academicYear: academicYear,
+      ...(course === "B.Tech" && { branch: branch }),
       ...(purpose === "general" && { postHolded: postHolded }),
       ...(purpose === "event" && { event: event }),
     };
@@ -158,30 +157,50 @@ const RequestForCertificate = () => {
             placeholder="Enter your roll number"
             onChange={(e) => setRollNumber(e.target.value)}
           />
-          <label for="branch">Branch</label>
+          <label for="course">Course</label>
           <select
             required
-            id="branch"
+            id="course"
             defaultValue="choose"
             className={styles.dropdown}
-            onChange={(e) => setBranch(e.target.value)}
+            onChange={(e) => setCourse(e.target.value)}
           >
             <option disabled hidden value="choose">
               Select Branch
             </option>
-            <option value="CE">CE - Civil Engineering</option>
-            <option value="CH">CH - Chemical Engineering</option>
-            <option value="CS">CS - Computer Science Engineering</option>
-            <option value="EC">
-              EC - Electronics and Communication Engineering
-            </option>
-            <option value="EE">EE - Electrical Engineering</option>
-            <option value="EI">
-              EI - Electronics and Instrumentation Engineering
-            </option>
-            <option value="IT">IT - Information Technology</option>
-            <option value="ME">ME - Mechanical Engineering</option>
+            <option value="B.Tech">B.Tech</option>
+            <option value="M.Tech">M.Tech</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
           </select>
+          {course === "B.Tech" && (
+            <>
+              <label for="branch">Branch</label>
+              <select
+                required
+                id="branch"
+                defaultValue="choose"
+                className={styles.dropdown}
+                onChange={(e) => setBranch(e.target.value)}
+              >
+                <option disabled hidden value="choose">
+                  Select Branch
+                </option>
+                <option value="CE">CE - Civil Engineering</option>
+                <option value="CH">CH - Chemical Engineering</option>
+                <option value="CS">CS - Computer Science Engineering</option>
+                <option value="EC">
+                  EC - Electronics and Communication Engineering
+                </option>
+                <option value="EE">EE - Electrical Engineering</option>
+                <option value="EI">
+                  EI - Electronics and Instrumentation Engineering
+                </option>
+                <option value="IT">IT - Information Technology</option>
+                <option value="ME">ME - Mechanical Engineering</option>
+              </select>
+            </>
+          )}
           <label for="purpose">Select Purpose</label>
           <div
             style={{
