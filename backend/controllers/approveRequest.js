@@ -46,7 +46,6 @@ exports.approveRequest = (req, res, next) => {
         const draw = SVG(document.documentElement);
 
         const { purpose } = data;
-        console.log(data);
 
         if (purpose === "event") {
           EventVolunteer.findOne({
@@ -163,7 +162,7 @@ exports.approveRequest = (req, res, next) => {
             .catch((err) => console.log(err));
         } else {
           const nameSVG = draw
-            .text(name)
+            .text(data.name)
             .size(45)
             .attr("x", "50%")
             .attr("y", "38%")
