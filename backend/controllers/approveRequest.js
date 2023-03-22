@@ -63,7 +63,7 @@ exports.approveRequest = (req, res, next) => {
                 .text(name)
                 .size(45)
                 .attr("x", "50%")
-                .attr("y", "45%")
+                .attr("y", "42%")
                 .attr("text-anchor", "middle");
 
               const branchSVG = draw
@@ -74,7 +74,8 @@ exports.approveRequest = (req, res, next) => {
                 .attr("text-anchor", "middle");
 
               const responsibilitySVG = draw
-                .text(responsibility)
+                .text(responsibility.toString())
+                .size(20)
                 .attr("x", "60%")
                 .attr("y", "55%")
                 .attr("text-anchor", "middle");
