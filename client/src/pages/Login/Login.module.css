@@ -46,6 +46,16 @@
   border: 1px solid #277bc0;
 }
 
+.test-credentials p {
+  color: #bbb;
+  line-height: 1em;  
+}
+
+.test-credentials p:first-of-type {
+  color: red;
+  font-weight: 500;
+}
+
 .login-btn {
   width: 130px;
   padding: 0.5rem;
