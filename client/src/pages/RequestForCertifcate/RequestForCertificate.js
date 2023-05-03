@@ -73,10 +73,6 @@ const RequestForCertificate = () => {
       toast.error("Select a course");
       setIsLoading(false);
       return;
-    } else if (!isAcademicYearValid(academicYear)) {
-      toast.error("Enter a valid Academic Year");
-      setIsLoading(false);
-      return;
     }
 
     if (purpose === "general") {
@@ -88,6 +84,11 @@ const RequestForCertificate = () => {
     } else if (purpose === "event") {
       if (!isEventValid(event)) {
         toast.error("Select a valid Event");
+        setIsLoading(false);
+        return;
+      }
+      if (!isAcademicYearValid(academicYear)) {
+        toast.error("Enter a valid Academic Year");
         setIsLoading(false);
         return;
       }
