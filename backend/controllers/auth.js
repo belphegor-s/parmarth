@@ -5,7 +5,9 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 
 const transporter = nodemailer.createTransport({
-  service: "hotmail",
+  service: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_APP_PSWD,
