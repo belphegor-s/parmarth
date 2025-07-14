@@ -216,8 +216,8 @@ const AddVolunteerData = () => {
             <option disabled hidden value="choose">
               Select Branch
             </option>
-            <option value="B.Tech">B.Tech.</option>
-            <option value="M.Tech">M.Tech.</option>
+            <option value="B.Tech.">B.Tech.</option>
+            <option value="M.Tech.">M.Tech.</option>
             <option value="MCA">MCA</option>
             <option value="MBA">MBA</option>
           </select>
