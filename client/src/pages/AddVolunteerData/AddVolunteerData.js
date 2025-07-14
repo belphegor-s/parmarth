@@ -23,8 +23,8 @@ const AddVolunteerData = () => {
 
   const isCourseValid = (course) => {
     switch (course) {
-      case "B.Tech":
-      case "M.Tech":
+      case "B.Tech.":
+      case "M.Tech.":
       case "MBA":
       case "MCA":
         return true;
@@ -221,7 +221,7 @@ const AddVolunteerData = () => {
             <option value="MCA">MCA</option>
             <option value="MBA">MBA</option>
           </select>
-          {course === "B.Tech" && (
+          {course === "B.Tech." && (
             <>
               <label for="branch">Branch</label>
               <select
