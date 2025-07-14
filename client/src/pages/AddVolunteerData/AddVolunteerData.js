@@ -147,7 +147,7 @@ const AddVolunteerData = () => {
               >
                 Courses should be only the following -
                 <br />
-                B.Tech | M.Tech | MBA | MCA
+                B.Tech. | M.Tech. | MBA | MCA
               </span>
               <span style={{ color: "#535353", fontWeight: "500" }}>
                 <ul>
@@ -155,7 +155,7 @@ const AddVolunteerData = () => {
                   <li>Course</li>
                   <li>
                     Branch (optional - leave this field empty in case of branch
-                    other than <strong>B.Tech</strong>)
+                    other than <strong>B.Tech.</strong>)
                   </li>
                   <li>Roll Number</li>
                   <li>Post Holded</li>
