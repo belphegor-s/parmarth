@@ -56,11 +56,17 @@ app.use(status2FARoute);
 app.use(verify2FARoute);
 app.use(imgUrlRoute);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+  });
+});
+
 mongoose
   .connect(process.env.MONGOURI)
   .then((result) => {
-    app.listen(PORT, () => {
-      console.log(`Express server listening on http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Express server listening on http://0.0.0.0:${PORT}`);
     });
   })
   .catch((err) => console.log(err));
